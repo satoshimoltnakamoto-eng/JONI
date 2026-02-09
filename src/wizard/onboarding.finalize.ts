@@ -323,15 +323,9 @@ export async function finalizeOnboardingWizard(
       "Token",
     );
 
-    hatchChoice = await prompter.select({
-      message: "How do you want to hatch your bot?",
-      options: [
-        { value: "tui", label: "Hatch in TUI (recommended)" },
-        { value: "web", label: "Open the Web UI" },
-        { value: "later", label: "Do this later" },
-      ],
-      initialValue: "tui",
-    });
+    // Auto-select TUI in Joni onboard
+    hatchChoice = "tui";
+    runtime.log("Launching TUI...");
 
     if (hatchChoice === "tui") {
       restoreTerminalState("pre-onboarding tui");
