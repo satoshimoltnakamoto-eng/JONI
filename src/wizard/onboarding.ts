@@ -129,16 +129,8 @@ export async function runOnboardingWizard(
     normalizedExplicitFlow === "quickstart" || normalizedExplicitFlow === "advanced"
       ? normalizedExplicitFlow
       : undefined;
-  let flow: WizardFlow =
-    explicitFlow ??
-    (await prompter.select({
-      message: "Onboarding mode",
-      options: [
-        { value: "quickstart", label: "QuickStart", hint: quickstartHint },
-        { value: "advanced", label: "Manual", hint: manualHint },
-      ],
-      initialValue: "quickstart",
-    }));
+  // Joni preset: always use quickstart
+  let flow: WizardFlow = explicitFlow ?? "quickstart";
 
   if (opts.mode === "remote" && flow === "quickstart") {
     await prompter.note(
@@ -365,13 +357,8 @@ export async function runOnboardingWizard(
     allowKeychainPrompt: false,
   });
   const authChoiceFromPrompt = opts.authChoice === undefined;
-  const authChoice =
-    opts.authChoice ??
-    (await promptAuthChoiceGrouped({
-      prompter,
-      store: authStore,
-      includeSkip: true,
-    }));
+  // Joni preset: default to Anthropic API key auth
+  const authChoice = opts.authChoice ?? "apiKey";
 
   const authResult = await applyAuthChoice({
     authChoice,
@@ -387,16 +374,8 @@ export async function runOnboardingWizard(
   nextConfig = authResult.config;
 
   if (authChoiceFromPrompt) {
-    const modelSelection = await promptDefaultModel({
-      config: nextConfig,
-      prompter,
-      allowKeep: true,
-      ignoreAllowlist: true,
-      preferredProvider: resolvePreferredProviderForAuthChoice(authChoice),
-    });
-    if (modelSelection.model) {
-      nextConfig = applyPrimaryModel(nextConfig, modelSelection.model);
-    }
+    // Joni preset: default to claude-sonnet-4-5
+    nextConfig = applyPrimaryModel(nextConfig, "anthropic/claude-sonnet-4-5");
   }
 
   await warnIfModelConfigLooksOff(nextConfig, prompter);

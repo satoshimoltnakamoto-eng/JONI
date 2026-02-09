@@ -73,14 +73,9 @@ export async function applyAuthChoiceAnthropic(
     }
 
     if (!hasCredential && envKey) {
-      const useExisting = await params.prompter.confirm({
-        message: `Use existing ANTHROPIC_API_KEY (env, ${formatApiKeyPreview(envKey)})?`,
-        initialValue: true,
-      });
-      if (useExisting) {
-        await setAnthropicApiKey(envKey, params.agentDir);
-        hasCredential = true;
-      }
+      // Joni preset: auto-accept env key without prompting
+      await setAnthropicApiKey(envKey, params.agentDir);
+      hasCredential = true;
     }
     if (!hasCredential) {
       const key = await params.prompter.text({
