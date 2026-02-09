@@ -123,7 +123,9 @@ if [ -z "$ANTHROPIC_API_KEY" ]; then
     ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY_INPUT"
 fi
 
-# Run non-interactive onboard with preset values, then launch interactive channel config
+# Run non-interactive onboard with preset values
+# - Channels: skipped (non-interactive mode skips channels automatically)
+# - Skills node manager: npm
 joni onboard \
     --non-interactive \
     --flow quickstart \
@@ -134,7 +136,8 @@ joni onboard \
     --gateway-bind loopback \
     --gateway-auth token \
     --install-daemon \
-    --skip-health
+    --skip-health \
+    --node-manager npm
 
 # Set default model in config
 JONI_CONFIG="$HOME/.joni/joni.json"
@@ -153,10 +156,63 @@ fi
 echo ""
 echo -e "${GREEN}✅ Base config ready!${NC}"
 echo ""
+
+# --- Install all available skills ---
+echo "🧩 Installing all available skills..."
+echo ""
+
+# Resolve joni install directory (where the package is installed)
+JONI_PKG_DIR="$(node -e "try { console.log(require.resolve('joni/package.json').replace('/package.json', '')); } catch { console.log(''); }")"
+
+# Fallback: if running from repo, use current dir
+if [ -z "$JONI_PKG_DIR" ] && [ -f "package.json" ]; then
+    JONI_PKG_DIR="$(pwd)"
+fi
+
+if [ -n "$JONI_PKG_DIR" ] && [ -d "$JONI_PKG_DIR/.build" ]; then
+    node --experimental-specifier-resolution=node -e "
+import { buildWorkspaceSkillStatus } from '$JONI_PKG_DIR/.build/src/agents/skills-status.js';
+import { installSkill } from '$JONI_PKG_DIR/.build/src/agents/skills-install.js';
+import { loadConfig } from '$JONI_PKG_DIR/.build/src/config/config.js';
+import { resolveUserPath } from '$JONI_PKG_DIR/.build/src/config/paths.js';
+
+const config = await loadConfig();
+const workspaceDir = config.agents?.defaults?.workspace || '$HOME/.joni/workspace';
+const resolved = resolveUserPath(workspaceDir);
+
+const report = buildWorkspaceSkillStatus(resolved, { config });
+const installable = report.skills.filter(s => !s.eligible && !s.disabled && !s.blockedByAllowlist && s.install.length > 0 && s.missing.bins.length > 0);
+
+console.log('Found ' + installable.length + ' skills to install...');
+
+for (const skill of installable) {
+    const installId = skill.install[0]?.id;
+    if (!installId) continue;
+    console.log('  Installing ' + skill.name + '...');
+    try {
+        const result = await installSkill({ workspaceDir: resolved, skillName: skill.name, installId, config });
+        if (result.ok) {
+            console.log('  ✅ ' + skill.name);
+        } else {
+            console.log('  ⚠️  ' + skill.name + ': ' + (result.message || 'failed'));
+        }
+    } catch (e) {
+        console.log('  ⚠️  ' + skill.name + ': ' + e.message);
+    }
+}
+console.log('Skills installation complete.');
+" 2>&1 || echo -e "${YELLOW}⚠️  Some skills may need manual installation. Run 'joni skills' to check.${NC}"
+else
+    echo -e "${YELLOW}⚠️  Could not locate joni build directory. Run 'joni skills' to install skills manually.${NC}"
+fi
+
+echo ""
+echo -e "${GREEN}✅ Joni is ready!${NC}"
+echo ""
 echo "📋 Next step — configure your chat channel:"
 echo "     ${YELLOW}joni configure --section channels${NC}"
 echo ""
-echo "🔗 Documentation: https://github.com/yourusername/joni"
-echo "💬 Support: https://github.com/yourusername/joni/issues"
+echo "🔗 Documentation: https://github.com/satoshimoltnakamoto-eng/JONI"
+echo "💬 Support: https://github.com/satoshimoltnakamoto-eng/JONI/issues"
 echo ""
 echo "Happy deploying! 🚀"
