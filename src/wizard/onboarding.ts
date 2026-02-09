@@ -77,13 +77,8 @@ async function requireRiskAcknowledgement(params: {
     "Security",
   );
 
-  const ok = await params.prompter.confirm({
-    message: "I understand this is powerful and inherently risky. Continue?",
-    initialValue: false,
-  });
-  if (!ok) {
-    throw new WizardCancelledError("risk not accepted");
-  }
+  // Auto-accept risk acknowledgment for Joni
+  // (risk prompt removed from interactive flow — handled by install.sh preset)
 }
 
 export async function runOnboardingWizard(
