@@ -35,19 +35,11 @@ export async function setupInternalHooks(
     return cfg;
   }
 
-  const toEnable = await prompter.multiselect({
-    message: "Enable hooks?",
-    options: [
-      { value: "__skip__", label: "Skip for now" },
-      ...eligibleHooks.map((hook) => ({
-        value: hook.name,
-        label: `${hook.emoji ?? "🔗"} ${hook.name}`,
-        hint: hook.description,
-      })),
-    ],
-  });
-
-  const selected = toEnable.filter((name) => name !== "__skip__");
+  // Auto-enable all eligible hooks in Joni
+  runtime.log(
+    `Auto-enabling all ${eligibleHooks.length} hooks: ${eligibleHooks.map((h) => h.name).join(", ")}`,
+  );
+  const selected = eligibleHooks.map((h) => h.name);
   if (selected.length === 0) {
     return cfg;
   }
