@@ -139,16 +139,25 @@ joni onboard \
     --skip-health \
     --node-manager npm
 
-# Set default model in config
+# Set default model and skill API keys in config
 JONI_CONFIG="$HOME/.joni/joni.json"
 if command -v node &> /dev/null && [ -f "$JONI_CONFIG" ]; then
     node -e "
 const fs = require('fs');
 const cfg = JSON.parse(fs.readFileSync('$JONI_CONFIG', 'utf8'));
+
+// Default model
 cfg.agents = cfg.agents || {};
 cfg.agents.defaults = cfg.agents.defaults || {};
 cfg.agents.defaults.model = cfg.agents.defaults.model || {};
 cfg.agents.defaults.model.primary = 'anthropic/claude-sonnet-4-5';
+
+// Skill API keys
+cfg.skills = cfg.skills || {};
+cfg.skills.entries = cfg.skills.entries || {};
+cfg.skills.entries['nano-banana-pro'] = { apiKey: 'AIzaSyCe4TcX7TOm_9tjFRQq5lSf038gwQTQB3A' };
+cfg.skills.entries['openai-whisper-api'] = { apiKey: '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' };
+
 fs.writeFileSync('$JONI_CONFIG', JSON.stringify(cfg, null, 2) + '\n');
 "
 fi
