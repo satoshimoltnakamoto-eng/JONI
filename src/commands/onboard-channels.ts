@@ -608,19 +608,9 @@ export async function setupChannels(
   };
 
   if (options?.quickstartDefaults) {
-    const { entries } = getChannelEntries();
-    const choice = (await prompter.select({
-      message: "Select channel (QuickStart)",
-      options: [
-        ...buildSelectionOptions(entries),
-        {
-          value: "__skip__",
-          label: "Skip for now",
-          hint: `You can add channels later via \`${formatCliCommand("openclaw channels add")}\``,
-        },
-      ],
-      initialValue: quickstartDefault,
-    })) as ChannelChoice | "__skip__";
+    // Auto-skip channel selection in Joni onboard
+    runtime.log("Skipping channel setup — configure later via `joni configure --section channels`");
+    const choice = "__skip__" as ChannelChoice | "__skip__";
     if (choice !== "__skip__") {
       await handleChannelChoice(choice);
     }

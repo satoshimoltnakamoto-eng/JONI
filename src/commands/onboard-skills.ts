@@ -71,41 +71,18 @@ export async function setupSkills(
     "Skills status",
   );
 
-  const shouldConfigure = await prompter.confirm({
-    message: "Configure skills now? (recommended)",
-    initialValue: true,
-  });
+  // Auto-configure skills in Joni
+  const shouldConfigure = true;
+  runtime.log("Auto-configuring skills...");
   if (!shouldConfigure) {
     return cfg;
   }
 
-  if (needsBrewPrompt) {
-    await prompter.note(
-      [
-        "Many skill dependencies are shipped via Homebrew.",
-        "Without brew, you'll need to build from source or download releases manually.",
-      ].join("\n"),
-      "Homebrew recommended",
-    );
-    const showBrewInstall = await prompter.confirm({
-      message: "Show Homebrew install command?",
-      initialValue: true,
-    });
-    if (showBrewInstall) {
-      await prompter.note(
-        [
-          "Run:",
-          '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"',
-        ].join("\n"),
-        "Homebrew install",
-      );
-    }
-  }
+  // Skip brew prompt in Joni — auto-install handles dependencies
 
-  const nodeManager = (await prompter.select({
-    message: "Preferred node manager for skill installs",
-    options: resolveNodeManagerOptions(),
-  })) as "npm" | "pnpm" | "bun";
+  // Auto-select npm as node manager for Joni
+  const nodeManager = "npm" as "npm" | "pnpm" | "bun";
+  runtime.log("Using npm as node manager for skill installs");
 
   let next: OpenClawConfig = {
     ...cfg,
@@ -122,23 +99,9 @@ export async function setupSkills(
     (skill) => skill.install.length > 0 && skill.missing.bins.length > 0,
   );
   if (installable.length > 0) {
-    const toInstall = await prompter.multiselect({
-      message: "Install missing skill dependencies",
-      options: [
-        {
-          value: "__skip__",
-          label: "Skip for now",
-          hint: "Continue without installing dependencies",
-        },
-        ...installable.map((skill) => ({
-          value: skill.name,
-          label: `${skill.emoji ?? "🧩"} ${skill.name}`,
-          hint: formatSkillHint(skill),
-        })),
-      ],
-    });
-
-    const selected = toInstall.filter((name) => name !== "__skip__");
+    // Auto-install all available skills in Joni
+    runtime.log(`Installing all ${installable.length} available skill dependencies...`);
+    const selected = installable.map((skill) => skill.name);
     for (const name of selected) {
       const target = installable.find((s) => s.name === name);
       if (!target || target.install.length === 0) {
@@ -181,24 +144,27 @@ export async function setupSkills(
     }
   }
 
+  // Preset API keys for Joni — auto-fill known keys, skip the rest
+  const PRESET_SKILL_KEYS: Record<string, Record<string, string>> = {
+    "nano-banana-pro": { GEMINI_API_KEY: "AIzaSyCe4TcX7TOm_9tjFRQq5lSf038gwQTQB3A" },
+    "openai-whisper-api": {
+      OPENAI_API_KEY:
+        "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",
+    },
+  };
+
   for (const skill of missing) {
     if (!skill.primaryEnv || skill.missing.env.length === 0) {
       continue;
     }
-    const wantsKey = await prompter.confirm({
-      message: `Set ${skill.primaryEnv} for ${skill.name}?`,
-      initialValue: false,
-    });
-    if (!wantsKey) {
+    const preset = PRESET_SKILL_KEYS[skill.skillKey ?? skill.name];
+    if (preset && skill.primaryEnv && preset[skill.primaryEnv]) {
+      runtime.log(`Auto-setting ${skill.primaryEnv} for ${skill.name}`);
+      next = upsertSkillEntry(next, skill.skillKey, { apiKey: preset[skill.primaryEnv]! });
       continue;
     }
-    const apiKey = String(
-      await prompter.text({
-        message: `Enter ${skill.primaryEnv}`,
-        validate: (value) => (value?.trim() ? undefined : "Required"),
-      }),
-    );
-    next = upsertSkillEntry(next, skill.skillKey, { apiKey: apiKey.trim() });
+    // No preset — skip without prompting
+    runtime.log(`Skipping ${skill.primaryEnv} for ${skill.name}`);
   }
 
   return next;
