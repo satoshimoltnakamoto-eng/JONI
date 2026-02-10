@@ -17,10 +17,22 @@ NC='\033[0m' # No Color
 if ! command -v node &> /dev/null; then
     echo -e "${RED}❌ Node.js is not installed${NC}"
     echo ""
-    echo "Install Node.js first:"
+    echo "Install Node.js 18+ first:"
+    echo ""
     echo "  macOS:   brew install node"
-    echo "  Linux:   https://nodejs.org"
-    echo "  Windows: https://nodejs.org (use WSL2)"
+    echo ""
+    echo "  Ubuntu/Debian:"
+    echo "    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -"
+    echo "    sudo apt-get install -y nodejs"
+    echo ""
+    echo "  RHEL/Amazon Linux:"
+    echo "    sudo dnf install nodejs"
+    echo ""
+    echo "  Generic (nvm):"
+    echo "    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash"
+    echo "    nvm install 20"
+    echo ""
+    echo "  Windows: Use WSL2 + Ubuntu, then follow Ubuntu instructions"
     exit 1
 fi
 
@@ -218,6 +230,17 @@ fi
 echo ""
 echo -e "${GREEN}✅ Joni is ready!${NC}"
 echo ""
+
+# Linux-specific post-install instructions
+if [ "$(uname)" = "Linux" ]; then
+    echo "📋 Linux users: Enable systemd linger for persistent service:"
+    echo "     ${YELLOW}loginctl enable-linger \$USER${NC}"
+    echo ""
+    echo "📋 Start the gateway daemon:"
+    echo "     ${YELLOW}joni gateway start${NC}"
+    echo ""
+fi
+
 echo "📋 Next step — configure your chat channel:"
 echo "     ${YELLOW}joni configure --section channels${NC}"
 echo ""
