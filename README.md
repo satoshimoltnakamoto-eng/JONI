@@ -44,7 +44,13 @@ Simple, browser-based agent creation:
 
 ## Installation
 
-### Quick Install
+### One-Liner Install (Recommended)
+
+```bash
+curl -fsSL https://cdn.jsdelivr.net/gh/satoshimoltnakamoto-eng/JONI@main/install.sh | bash
+```
+
+### Or via npm
 
 ```bash
 npm install -g joni
