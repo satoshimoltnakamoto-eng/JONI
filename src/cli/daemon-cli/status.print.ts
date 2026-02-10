@@ -102,7 +102,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean })
     }
     defaultRuntime.error(
       warnText(
-        `Recommendation: run "${formatCliCommand("openclaw doctor")}" (or "${formatCliCommand("openclaw doctor --repair")}").`,
+        `Recommendation: run "${formatCliCommand("joni doctor")}" (or "${formatCliCommand("joni doctor --repair")}").`,
       ),
     );
   }
@@ -136,7 +136,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean })
       );
       defaultRuntime.error(
         errorText(
-          `Fix: rerun \`${formatCliCommand("openclaw gateway install --force")}\` from the same --profile / JONI_STATE_DIR you expect.`,
+          `Fix: rerun \`${formatCliCommand("joni gateway install --force")}\` from the same --profile / JONI_STATE_DIR you expect.`,
         ),
       );
     }
@@ -240,9 +240,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean })
         `LaunchAgent label cached but plist missing. Clear with: launchctl bootout gui/$UID/${labelValue}`,
       ),
     );
-    defaultRuntime.error(
-      errorText(`Then reinstall: ${formatCliCommand("openclaw gateway install")}`),
-    );
+    defaultRuntime.error(errorText(`Then reinstall: ${formatCliCommand("joni gateway install")}`));
     spacer();
   }
 
@@ -316,6 +314,6 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean })
     spacer();
   }
 
-  defaultRuntime.log(`${label("Troubles:")} run ${formatCliCommand("openclaw status")}`);
+  defaultRuntime.log(`${label("Troubles:")} run ${formatCliCommand("joni status")}`);
   defaultRuntime.log(`${label("Troubleshooting:")} https://docs.joni.ai/troubleshooting`);
 }

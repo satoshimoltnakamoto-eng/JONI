@@ -39,15 +39,12 @@ export function registerStatusHealthSessionsCommands(program: Command) {
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["openclaw status", "Show channel health + session summary."],
-          ["openclaw status --all", "Full diagnosis (read-only)."],
-          ["openclaw status --json", "Machine-readable output."],
-          ["openclaw status --usage", "Show model provider usage/quota snapshots."],
-          [
-            "openclaw status --deep",
-            "Run channel probes (WA + Telegram + Discord + Slack + Signal).",
-          ],
-          ["openclaw status --deep --timeout 5000", "Tighten probe timeout."],
+          ["joni status", "Show channel health + session summary."],
+          ["joni status --all", "Full diagnosis (read-only)."],
+          ["joni status --json", "Machine-readable output."],
+          ["joni status --usage", "Show model provider usage/quota snapshots."],
+          ["joni status --deep", "Run channel probes (WA + Telegram + Discord + Slack + Signal)."],
+          ["joni status --deep --timeout 5000", "Tighten probe timeout."],
         ])}`,
     )
     .addHelpText(

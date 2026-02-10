@@ -104,24 +104,24 @@ describe("applyCliProfileEnv", () => {
 
 describe("formatCliCommand", () => {
   it("returns command unchanged when no profile is set", () => {
-    expect(formatCliCommand("openclaw doctor --fix", {})).toBe("openclaw doctor --fix");
+    expect(formatCliCommand("joni doctor --fix", {})).toBe("joni doctor --fix");
   });
 
   it("returns command unchanged when profile is default", () => {
-    expect(formatCliCommand("openclaw doctor --fix", { OPENCLAW_PROFILE: "default" })).toBe(
-      "openclaw doctor --fix",
+    expect(formatCliCommand("joni doctor --fix", { OPENCLAW_PROFILE: "default" })).toBe(
+      "joni doctor --fix",
     );
   });
 
   it("returns command unchanged when profile is Default (case-insensitive)", () => {
-    expect(formatCliCommand("openclaw doctor --fix", { OPENCLAW_PROFILE: "Default" })).toBe(
-      "openclaw doctor --fix",
+    expect(formatCliCommand("joni doctor --fix", { OPENCLAW_PROFILE: "Default" })).toBe(
+      "joni doctor --fix",
     );
   });
 
   it("returns command unchanged when profile is invalid", () => {
-    expect(formatCliCommand("openclaw doctor --fix", { OPENCLAW_PROFILE: "bad profile" })).toBe(
-      "openclaw doctor --fix",
+    expect(formatCliCommand("joni doctor --fix", { OPENCLAW_PROFILE: "bad profile" })).toBe(
+      "joni doctor --fix",
     );
   });
 
@@ -138,14 +138,14 @@ describe("formatCliCommand", () => {
   });
 
   it("inserts --profile flag when profile is set", () => {
-    expect(formatCliCommand("openclaw doctor --fix", { OPENCLAW_PROFILE: "work" })).toBe(
+    expect(formatCliCommand("joni doctor --fix", { OPENCLAW_PROFILE: "work" })).toBe(
       "openclaw --profile work doctor --fix",
     );
   });
 
   it("trims whitespace from profile", () => {
-    expect(formatCliCommand("openclaw doctor --fix", { OPENCLAW_PROFILE: "  jbopenclaw  " })).toBe(
-      "openclaw --profile jbopenclaw doctor --fix",
+    expect(formatCliCommand("joni doctor --fix", { OPENCLAW_PROFILE: "  jbopenclaw  " })).toBe(
+      "openclaw --profile jbjoni doctor --fix",
     );
   });
 
@@ -156,7 +156,7 @@ describe("formatCliCommand", () => {
   });
 
   it("handles pnpm wrapper", () => {
-    expect(formatCliCommand("pnpm openclaw doctor", { OPENCLAW_PROFILE: "work" })).toBe(
+    expect(formatCliCommand("pnpm joni doctor", { OPENCLAW_PROFILE: "work" })).toBe(
       "pnpm openclaw --profile work doctor",
     );
   });

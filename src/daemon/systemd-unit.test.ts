@@ -3,7 +3,7 @@ import { parseSystemdExecStart } from "./systemd-unit.js";
 
 describe("parseSystemdExecStart", () => {
   it("splits on whitespace outside quotes", () => {
-    const execStart = "/usr/bin/openclaw gateway start --foo bar";
+    const execStart = "/usr/bin/joni gateway start --foo bar";
     expect(parseSystemdExecStart(execStart)).toEqual([
       "/usr/bin/openclaw",
       "gateway",
@@ -14,7 +14,7 @@ describe("parseSystemdExecStart", () => {
   });
 
   it("preserves quoted arguments", () => {
-    const execStart = '/usr/bin/openclaw gateway start --name "My Bot"';
+    const execStart = '/usr/bin/joni gateway start --name "My Bot"';
     expect(parseSystemdExecStart(execStart)).toEqual([
       "/usr/bin/openclaw",
       "gateway",
@@ -25,7 +25,7 @@ describe("parseSystemdExecStart", () => {
   });
 
   it("parses path arguments", () => {
-    const execStart = "/usr/bin/openclaw gateway start --path /tmp/openclaw";
+    const execStart = "/usr/bin/joni gateway start --path /tmp/openclaw";
     expect(parseSystemdExecStart(execStart)).toEqual([
       "/usr/bin/openclaw",
       "gateway",

@@ -119,7 +119,7 @@ export async function setupSkills(
         runtime.log(result.stdout.trim());
       }
       runtime.log(
-        `Tip: run \`${formatCliCommand("openclaw doctor")}\` to review skills + requirements.`,
+        `Tip: run \`${formatCliCommand("joni doctor")}\` to review skills + requirements.`,
       );
       runtime.log("Docs: https://docs.joni.ai/skills");
     }

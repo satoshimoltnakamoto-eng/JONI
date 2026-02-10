@@ -1,3 +1,40 @@
+#!/bin/bash
+set -e
+
+echo "🐙 Starting complete JONI rebranding..."
+
+# Fix package.json android references
+sed -i '' 's/ai\.openclaw\.android/ai.joni.android/g' package.json
+
+# Fix all user-facing strings in source code
+find src -type f \( -name "*.ts" -o -name "*.tsx" \) -exec sed -i '' \
+  -e 's/"OpenClaw/"JONI/g' \
+  -e "s/'OpenClaw/'JONI/g" \
+  -e 's/OpenClaw runs/JONI runs/g' \
+  -e 's/OpenClaw is/JONI is/g' \
+  -e 's/openclaw onboard/joni onboard/g' \
+  -e 's/openclaw doctor/joni doctor/g' \
+  -e 's/openclaw gateway/joni gateway/g' \
+  -e 's/openclaw configure/joni configure/g' \
+  -e 's/openclaw security/joni security/g' \
+  -e 's/openclaw status/joni status/g' \
+  -e 's/openclaw completion/joni completion/g' \
+  -e 's|docs\.openclaw\.ai|docs.joni.ai|g' \
+  -e 's|https://openclaw\.ai|https://joni.ai|g' \
+  {} \;
+
+# Fix README
+if [ -f README.md ]; then
+  sed -i '' \
+    -e 's/OpenClaw/JONI/g' \
+    -e 's/openclaw/joni/g' \
+    -e 's|docs\.openclaw\.ai|docs.joni.ai|g' \
+    -e 's|https://openclaw\.ai|https://joni.ai|g' \
+    README.md
+fi
+
+# Fix install script - complete replacement
+cat > install.sh << 'EOF'
 #!/usr/bin/env bash
 set -e
 
@@ -175,3 +212,15 @@ echo "🔗 Docs: https://github.com/satoshimoltnakamoto-eng/JONI"
 echo "💬 Support: https://github.com/satoshimoltnakamoto-eng/JONI/issues"
 echo ""
 echo "Happy hacking! 🚀"
+EOF
+
+chmod +x install.sh
+
+echo "✅ Complete rebranding done!"
+echo ""
+echo "Summary of changes:"
+echo "  - All OpenClaw → JONI in source code"
+echo "  - All openclaw commands → joni commands"
+echo "  - All docs.openclaw.ai → docs.joni.ai"
+echo "  - New install.sh with JONI branding"
+echo "  - package.json android references fixed"

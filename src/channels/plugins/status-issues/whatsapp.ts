@@ -65,7 +65,7 @@ export function collectWhatsAppStatusIssues(
         accountId,
         kind: "runtime",
         message: `Linked but disconnected${reconnectAttempts != null ? ` (reconnectAttempts=${reconnectAttempts})` : ""}${lastError ? `: ${lastError}` : "."}`,
-        fix: `Run: ${formatCliCommand("openclaw doctor")} (or restart the gateway). If it persists, relink via channels login and check logs.`,
+        fix: `Run: ${formatCliCommand("joni doctor")} (or restart the gateway). If it persists, relink via channels login and check logs.`,
       });
     }
   }

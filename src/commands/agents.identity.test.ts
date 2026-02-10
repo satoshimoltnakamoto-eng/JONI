@@ -82,7 +82,7 @@ describe("agents set-identity command", () => {
     };
     const main = written.agents?.list?.find((entry) => entry.id === "main");
     expect(main?.identity).toEqual({
-      name: "OpenClaw",
+      name: "JONI",
       theme: "helpful sloth",
       emoji: ":)",
       avatar: "avatars/openclaw.png",

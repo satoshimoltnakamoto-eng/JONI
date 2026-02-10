@@ -315,7 +315,7 @@ describe("statusCommand", () => {
     (runtime.log as vi.Mock).mockClear();
     await statusCommand({}, runtime as never);
     const logs = (runtime.log as vi.Mock).mock.calls.map((c) => String(c[0]));
-    expect(logs.some((l) => l.includes("OpenClaw status"))).toBe(true);
+    expect(logs.some((l) => l.includes("JONI status"))).toBe(true);
     expect(logs.some((l) => l.includes("Overview"))).toBe(true);
     expect(logs.some((l) => l.includes("Security audit"))).toBe(true);
     expect(logs.some((l) => l.includes("Summary:"))).toBe(true);
@@ -335,9 +335,9 @@ describe("statusCommand", () => {
     expect(
       logs.some(
         (l) =>
-          l.includes("openclaw status --all") ||
+          l.includes("joni status --all") ||
           l.includes("openclaw --profile isolated status --all") ||
-          l.includes("openclaw status --all") ||
+          l.includes("joni status --all") ||
           l.includes("openclaw --profile isolated status --all"),
       ),
     ).toBe(true);
