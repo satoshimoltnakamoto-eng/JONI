@@ -67,7 +67,7 @@ if [ -d ".git" ] && [ -f "package.json" ]; then
     
 else
     # Download from GitHub
-    REPO_URL="https://github.com/yourusername/joni"
+    REPO_URL="https://github.com/satoshimoltnakamoto-eng/JONI"
     TEMP_DIR="/tmp/joni-install-$$"
     
     echo "⬇️  Downloading Joni from GitHub..."
