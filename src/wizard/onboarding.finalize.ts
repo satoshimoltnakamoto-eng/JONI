@@ -313,7 +313,7 @@ export async function finalizeOnboardingWizard(
     await prompter.note(
       [
         "Gateway token: shared auth for the Gateway + Control UI.",
-        "Stored in: ~/.joni/openclaw.json (gateway.auth.token) or JONI_GATEWAY_TOKEN.",
+        "Stored in: ~/.joni/joni.json (gateway.auth.token) or JONI_GATEWAY_TOKEN.",
         `View token: ${formatCliCommand("openclaw config get gateway.auth.token")}`,
         `Generate token: ${formatCliCommand("openclaw doctor --generate-gateway-token")}`,
         "Web UI stores a copy in this browser's localStorage (joni.control.settings.v1).",

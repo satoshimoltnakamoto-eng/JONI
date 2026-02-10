@@ -118,7 +118,7 @@ export function applyCliProfileEnv(params: {
   }
 
   if (!env.JONI_CONFIG_PATH?.trim()) {
-    env.JONI_CONFIG_PATH = path.join(stateDir, "openclaw.json");
+    env.JONI_CONFIG_PATH = path.join(stateDir, "joni.json");
   }
 
   if (profile === "dev" && !env.JONI_GATEWAY_PORT?.trim()) {

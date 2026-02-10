@@ -153,7 +153,7 @@ export function registerDnsCli(program: Command) {
         }).trimEnd(),
       );
       defaultRuntime.log("");
-      defaultRuntime.log(theme.heading("Recommended ~/.joni/openclaw.json:"));
+      defaultRuntime.log(theme.heading("Recommended ~/.joni/joni.json:"));
       defaultRuntime.log(
         JSON.stringify(
           {
@@ -254,7 +254,7 @@ export function registerDnsCli(program: Command) {
         defaultRuntime.log("");
         defaultRuntime.log(
           theme.muted(
-            "Note: enable discovery.wideArea.enabled in ~/.joni/openclaw.json on the gateway and restart the gateway so it writes the DNS-SD zone.",
+            "Note: enable discovery.wideArea.enabled in ~/.joni/joni.json on the gateway and restart the gateway so it writes the DNS-SD zone.",
           ),
         );
       }

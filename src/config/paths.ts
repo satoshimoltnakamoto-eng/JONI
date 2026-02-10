@@ -114,7 +114,7 @@ export const STATE_DIR = resolveStateDir();
 /**
  * Config file path (JSON5).
  * Can be overridden via JONI_CONFIG_PATH.
- * Default: ~/.joni/openclaw.json (or $JONI_STATE_DIR/openclaw.json)
+ * Default: ~/.joni/joni.json (or $JONI_STATE_DIR/openclaw.json)
  */
 export function resolveCanonicalConfigPath(
   env: NodeJS.ProcessEnv = process.env,

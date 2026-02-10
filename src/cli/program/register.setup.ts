@@ -10,7 +10,7 @@ import { hasExplicitOptions } from "../command-options.js";
 export function registerSetupCommand(program: Command) {
   program
     .command("setup")
-    .description("Initialize ~/.joni/openclaw.json and the agent workspace")
+    .description("Initialize ~/.joni/joni.json and the agent workspace")
     .addHelpText(
       "after",
       () => `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/setup", "docs.joni.ai/cli/setup")}\n`,
