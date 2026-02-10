@@ -10,7 +10,7 @@
     "joni": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.1.26"
+    "joni": "workspace:*"
   },
   "openclaw": {
     "extensions": [
