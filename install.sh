@@ -127,7 +127,10 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo ""
 echo "📋 Next Steps:"
 echo ""
-echo "  1️⃣  Configure JONI:"
+echo "  1️⃣  Quick auto-setup (recommended):"
+echo "     ${YELLOW}./setup-joni.sh${NC}"
+echo ""
+echo "     Or manual configuration:"
 echo "     ${YELLOW}joni onboard${NC}"
 echo ""
 echo "  2️⃣  Start the gateway:"
@@ -142,3 +145,8 @@ echo "🔗 Docs: https://github.com/satoshimoltnakamoto-eng/JONI"
 echo "💬 Support: https://github.com/satoshimoltnakamoto-eng/JONI/issues"
 echo ""
 echo "Happy hacking! 🚀"
+
+# Optional: Auto-run onboard with defaults
+# Uncomment the next lines to auto-configure after install
+# export ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY:-your-key-here}"
+# joni onboard --non-interactive --accept-risk --flow quickstart --mode local --install-daemon
