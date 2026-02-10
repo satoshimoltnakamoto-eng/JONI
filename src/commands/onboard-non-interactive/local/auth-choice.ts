@@ -6,10 +6,7 @@ import { upsertSharedEnvVar } from "../../../infra/env-file.js";
 import { normalizeApiKeyInput } from "../../auth-choice.api-key.js";
 import { applyDefaultModelChoice } from "../../auth-choice.default-model.js";
 import { buildTokenProfileId } from "../../auth-token.js";
-import {
-  applyGoogleGeminiModelDefault,
-  GOOGLE_GEMINI_DEFAULT_MODEL,
-} from "../../google-gemini-model-default.js";
+import { applyGoogleGeminiModelDefault } from "../../google-gemini-model-default.js";
 import {
   applyAuthProfileConfig,
   setAnthropicApiKey,
