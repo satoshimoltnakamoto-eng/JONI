@@ -135,7 +135,7 @@ The tunnel will now:
 - Restart if it crashes
 - Keep running in the background
 
-Legacy note: remove any leftover `com.openclaw.ssh-tunnel` LaunchAgent if present.
+Legacy note: remove any leftover `com.joni.ssh-tunnel` LaunchAgent if present.
 
 ---
 

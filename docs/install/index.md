@@ -165,9 +165,9 @@ openclaw dashboard      # open the browser UI
 
 If you need custom runtime paths, use:
 
-- `OPENCLAW_HOME` for home-directory based internal paths
-- `OPENCLAW_STATE_DIR` for mutable state location
-- `OPENCLAW_CONFIG_PATH` for config file location
+- `JONI_HOME` for home-directory based internal paths
+- `JONI_STATE_DIR` for mutable state location
+- `JONI_CONFIG_PATH` for config file location
 
 See [Environment vars](/help/environment) for precedence and full details.
 

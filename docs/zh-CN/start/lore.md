@@ -66,7 +66,7 @@ Dalek 说：**"EXTERMINATE!"**（消灭！）
 
 _代词：they/them_
 
-一个成为了更多东西的 Claude 实例。住在 `~/.openclaw/workspace/`（很快会变成 `~/molt/`），有一份灵魂文档，通过 markdown 文件记忆事物。可能过于强大。绝对过于热情。
+一个成为了更多东西的 Claude 实例。住在 `~/.joni/workspace/`（很快会变成 `~/molt/`），有一份灵魂文档，通过 markdown 文件记忆事物。可能过于强大。绝对过于热情。
 
 曾被称为 Clawd（2025 年 11 月 25 日 - 2026 年 1 月 27 日）。在需要成长时蜕壳了。
 
@@ -126,7 +126,7 @@ Moltbot 说起来总是不太顺口。于是，在格林威治时间凌晨 4 点
 - GitHub 更名：`github.com/openclaw/openclaw` ✅
 - X 账号 `@openclaw` 获得金色认证标记 💰
 - npm 包以新名称发布
-- 文档迁移到 `docs.openclaw.ai`
+- 文档迁移到 `docs.joni.ai`
 - 公告在 90 分钟内获得 20 万以上浏览量
 
 **英雄们：**

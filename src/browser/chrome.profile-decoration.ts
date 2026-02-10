@@ -3,7 +3,7 @@ import path from "node:path";
 import { DEFAULT_JONI_BROWSER_COLOR, DEFAULT_JONI_BROWSER_PROFILE_NAME } from "./constants.js";
 
 function decoratedMarkerPath(userDataDir: string) {
-  return path.join(userDataDir, ".openclaw-profile-decorated");
+  return path.join(userDataDir, ".joni-profile-decorated");
 }
 
 function safeReadJson(filePath: string): Record<string, unknown> | null {

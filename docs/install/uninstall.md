@@ -45,15 +45,15 @@ openclaw gateway uninstall
 3. Delete state + config:
 
 ```bash
-rm -rf "${OPENCLAW_STATE_DIR:-$HOME/.openclaw}"
+rm -rf "${JONI_STATE_DIR:-$HOME/.joni}"
 ```
 
-If you set `OPENCLAW_CONFIG_PATH` to a custom location outside the state dir, delete that file too.
+If you set `JONI_CONFIG_PATH` to a custom location outside the state dir, delete that file too.
 
 4. Delete your workspace (optional, removes agent files):
 
 ```bash
-rm -rf ~/.openclaw/workspace
+rm -rf ~/.joni/workspace
 ```
 
 5. Remove the CLI install (pick the one you used):
@@ -72,7 +72,7 @@ rm -rf /Applications/OpenClaw.app
 
 Notes:
 
-- If you used profiles (`--profile` / `OPENCLAW_PROFILE`), repeat step 3 for each state dir (defaults are `~/.openclaw-<profile>`).
+- If you used profiles (`--profile` / `OPENCLAW_PROFILE`), repeat step 3 for each state dir (defaults are `~/.joni-<profile>`).
 - In remote mode, the state dir lives on the **gateway host**, so run steps 1-4 there too.
 
 ## Manual service removal (CLI not installed)
@@ -81,14 +81,14 @@ Use this if the gateway service keeps running but `openclaw` is missing.
 
 ### macOS (launchd)
 
-Default label is `bot.molt.gateway` (or `bot.molt.<profile>`; legacy `com.openclaw.*` may still exist):
+Default label is `bot.molt.gateway` (or `bot.molt.<profile>`; legacy `com.joni.*` may still exist):
 
 ```bash
 launchctl bootout gui/$UID/bot.molt.gateway
 rm -f ~/Library/LaunchAgents/bot.molt.gateway.plist
 ```
 
-If you used a profile, replace the label and plist name with `bot.molt.<profile>`. Remove any legacy `com.openclaw.*` plists if present.
+If you used a profile, replace the label and plist name with `bot.molt.<profile>`. Remove any legacy `com.joni.*` plists if present.
 
 ### Linux (systemd user unit)
 
@@ -107,10 +107,10 @@ The task script lives under your state dir.
 
 ```powershell
 schtasks /Delete /F /TN "OpenClaw Gateway"
-Remove-Item -Force "$env:USERPROFILE\.openclaw\gateway.cmd"
+Remove-Item -Force "$env:USERPROFILE\.joni\gateway.cmd"
 ```
 
-If you used a profile, delete the matching task name and `~\.openclaw-<profile>\gateway.cmd`.
+If you used a profile, delete the matching task name and `~\.joni-<profile>\gateway.cmd`.
 
 ## Normal install vs source checkout
 

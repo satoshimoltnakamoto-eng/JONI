@@ -404,9 +404,9 @@ describe("security audit", () => {
   });
 
   it("flags Discord native commands without a guild user allowlist", async () => {
-    const prevStateDir = process.env.OPENCLAW_STATE_DIR;
+    const prevStateDir = process.env.JONI_STATE_DIR;
     const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-security-audit-discord-"));
-    process.env.OPENCLAW_STATE_DIR = tmp;
+    process.env.JONI_STATE_DIR = tmp;
     await fs.mkdir(path.join(tmp, "credentials"), { recursive: true, mode: 0o700 });
     try {
       const cfg: OpenClawConfig = {
@@ -443,19 +443,19 @@ describe("security audit", () => {
       );
     } finally {
       if (prevStateDir == null) {
-        delete process.env.OPENCLAW_STATE_DIR;
+        delete process.env.JONI_STATE_DIR;
       } else {
-        process.env.OPENCLAW_STATE_DIR = prevStateDir;
+        process.env.JONI_STATE_DIR = prevStateDir;
       }
     }
   });
 
   it("does not flag Discord slash commands when dm.allowFrom includes a Discord snowflake id", async () => {
-    const prevStateDir = process.env.OPENCLAW_STATE_DIR;
+    const prevStateDir = process.env.JONI_STATE_DIR;
     const tmp = await fs.mkdtemp(
       path.join(os.tmpdir(), "openclaw-security-audit-discord-allowfrom-snowflake-"),
     );
-    process.env.OPENCLAW_STATE_DIR = tmp;
+    process.env.JONI_STATE_DIR = tmp;
     await fs.mkdir(path.join(tmp, "credentials"), { recursive: true, mode: 0o700 });
     try {
       const cfg: OpenClawConfig = {
@@ -492,17 +492,17 @@ describe("security audit", () => {
       );
     } finally {
       if (prevStateDir == null) {
-        delete process.env.OPENCLAW_STATE_DIR;
+        delete process.env.JONI_STATE_DIR;
       } else {
-        process.env.OPENCLAW_STATE_DIR = prevStateDir;
+        process.env.JONI_STATE_DIR = prevStateDir;
       }
     }
   });
 
   it("flags Discord slash commands when access-group enforcement is disabled and no users allowlist exists", async () => {
-    const prevStateDir = process.env.OPENCLAW_STATE_DIR;
+    const prevStateDir = process.env.JONI_STATE_DIR;
     const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-security-audit-discord-open-"));
-    process.env.OPENCLAW_STATE_DIR = tmp;
+    process.env.JONI_STATE_DIR = tmp;
     await fs.mkdir(path.join(tmp, "credentials"), { recursive: true, mode: 0o700 });
     try {
       const cfg: OpenClawConfig = {
@@ -540,17 +540,17 @@ describe("security audit", () => {
       );
     } finally {
       if (prevStateDir == null) {
-        delete process.env.OPENCLAW_STATE_DIR;
+        delete process.env.JONI_STATE_DIR;
       } else {
-        process.env.OPENCLAW_STATE_DIR = prevStateDir;
+        process.env.JONI_STATE_DIR = prevStateDir;
       }
     }
   });
 
   it("flags Slack slash commands without a channel users allowlist", async () => {
-    const prevStateDir = process.env.OPENCLAW_STATE_DIR;
+    const prevStateDir = process.env.JONI_STATE_DIR;
     const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-security-audit-slack-"));
-    process.env.OPENCLAW_STATE_DIR = tmp;
+    process.env.JONI_STATE_DIR = tmp;
     await fs.mkdir(path.join(tmp, "credentials"), { recursive: true, mode: 0o700 });
     try {
       const cfg: OpenClawConfig = {
@@ -582,17 +582,17 @@ describe("security audit", () => {
       );
     } finally {
       if (prevStateDir == null) {
-        delete process.env.OPENCLAW_STATE_DIR;
+        delete process.env.JONI_STATE_DIR;
       } else {
-        process.env.OPENCLAW_STATE_DIR = prevStateDir;
+        process.env.JONI_STATE_DIR = prevStateDir;
       }
     }
   });
 
   it("flags Slack slash commands when access-group enforcement is disabled", async () => {
-    const prevStateDir = process.env.OPENCLAW_STATE_DIR;
+    const prevStateDir = process.env.JONI_STATE_DIR;
     const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-security-audit-slack-open-"));
-    process.env.OPENCLAW_STATE_DIR = tmp;
+    process.env.JONI_STATE_DIR = tmp;
     await fs.mkdir(path.join(tmp, "credentials"), { recursive: true, mode: 0o700 });
     try {
       const cfg: OpenClawConfig = {
@@ -625,17 +625,17 @@ describe("security audit", () => {
       );
     } finally {
       if (prevStateDir == null) {
-        delete process.env.OPENCLAW_STATE_DIR;
+        delete process.env.JONI_STATE_DIR;
       } else {
-        process.env.OPENCLAW_STATE_DIR = prevStateDir;
+        process.env.JONI_STATE_DIR = prevStateDir;
       }
     }
   });
 
   it("flags Telegram group commands without a sender allowlist", async () => {
-    const prevStateDir = process.env.OPENCLAW_STATE_DIR;
+    const prevStateDir = process.env.JONI_STATE_DIR;
     const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-security-audit-telegram-"));
-    process.env.OPENCLAW_STATE_DIR = tmp;
+    process.env.JONI_STATE_DIR = tmp;
     await fs.mkdir(path.join(tmp, "credentials"), { recursive: true, mode: 0o700 });
     try {
       const cfg: OpenClawConfig = {
@@ -666,9 +666,9 @@ describe("security audit", () => {
       );
     } finally {
       if (prevStateDir == null) {
-        delete process.env.OPENCLAW_STATE_DIR;
+        delete process.env.JONI_STATE_DIR;
       } else {
-        process.env.OPENCLAW_STATE_DIR = prevStateDir;
+        process.env.JONI_STATE_DIR = prevStateDir;
       }
     }
   });
@@ -831,8 +831,8 @@ describe("security audit", () => {
       config: cfg,
       includeFilesystem: false,
       includeChannelSecurity: false,
-      stateDir: "/Users/test/Dropbox/.openclaw",
-      configPath: "/Users/test/Dropbox/.openclaw/openclaw.json",
+      stateDir: "/Users/test/Dropbox/.joni",
+      configPath: "/Users/test/Dropbox/.joni/openclaw.json",
     });
 
     expect(res.findings).toEqual(

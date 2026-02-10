@@ -28,7 +28,7 @@ The macOS app’s **Install CLI** button runs the same flow via npm/pnpm (bun no
 
 Label:
 
-- `bot.molt.gateway` (or `bot.molt.<profile>`; legacy `com.openclaw.*` may remain)
+- `bot.molt.gateway` (or `bot.molt.<profile>`; legacy `com.joni.*` may remain)
 
 Plist location (per‑user):
 

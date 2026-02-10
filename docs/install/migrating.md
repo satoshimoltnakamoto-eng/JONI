@@ -12,8 +12,8 @@ This guide migrates a OpenClaw Gateway from one machine to another **without red
 
 The migration is simple conceptually:
 
-- Copy the **state directory** (`$OPENCLAW_STATE_DIR`, default: `~/.openclaw/`) — this includes config, auth, sessions, and channel state.
-- Copy your **workspace** (`~/.openclaw/workspace/` by default) — this includes your agent files (memory, prompts, etc.).
+- Copy the **state directory** (`$JONI_STATE_DIR`, default: `~/.joni/`) — this includes config, auth, sessions, and channel state.
+- Copy your **workspace** (`~/.joni/workspace/` by default) — this includes your agent files (memory, prompts, etc.).
 
 But there are common footguns around **profiles**, **permissions**, and **partial copies**.
 
@@ -23,12 +23,12 @@ But there are common footguns around **profiles**, **permissions**, and **partia
 
 Most installs use the default:
 
-- **State dir:** `~/.openclaw/`
+- **State dir:** `~/.joni/`
 
 But it may be different if you use:
 
-- `--profile <name>` (often becomes `~/.openclaw-<profile>/`)
-- `OPENCLAW_STATE_DIR=/some/path`
+- `--profile <name>` (often becomes `~/.joni-<profile>/`)
+- `JONI_STATE_DIR=/some/path`
 
 If you’re not sure, run on the **old** machine:
 
@@ -36,13 +36,13 @@ If you’re not sure, run on the **old** machine:
 openclaw status
 ```
 
-Look for mentions of `OPENCLAW_STATE_DIR` / profile in the output. If you run multiple gateways, repeat for each profile.
+Look for mentions of `JONI_STATE_DIR` / profile in the output. If you run multiple gateways, repeat for each profile.
 
 ### 2) Identify your workspace
 
 Common defaults:
 
-- `~/.openclaw/workspace/` (recommended workspace)
+- `~/.joni/workspace/` (recommended workspace)
 - a custom folder you created
 
 Your workspace is where files like `MEMORY.md`, `USER.md`, and `memory/*.md` live.
@@ -63,7 +63,7 @@ If you copy **only** the workspace (e.g., via Git), you do **not** preserve:
 - credentials
 - channel logins
 
-Those live under `$OPENCLAW_STATE_DIR`.
+Those live under `$JONI_STATE_DIR`.
 
 ## Migration steps (recommended)
 
@@ -80,12 +80,12 @@ openclaw gateway stop
 ```bash
 # Adjust paths if you use a profile or custom locations
 cd ~
-tar -czf openclaw-state.tgz .openclaw
+tar -czf openclaw-state.tgz .joni
 
-tar -czf openclaw-workspace.tgz .openclaw/workspace
+tar -czf openclaw-workspace.tgz .joni/workspace
 ```
 
-If you have multiple profiles/state dirs (e.g. `~/.openclaw-main`, `~/.openclaw-work`), archive each.
+If you have multiple profiles/state dirs (e.g. `~/.joni-main`, `~/.joni-work`), archive each.
 
 ### Step 1 — Install OpenClaw on the new machine
 
@@ -93,14 +93,14 @@ On the **new** machine, install the CLI (and Node if needed):
 
 - See: [Install](/install)
 
-At this stage, it’s OK if onboarding creates a fresh `~/.openclaw/` — you will overwrite it in the next step.
+At this stage, it’s OK if onboarding creates a fresh `~/.joni/` — you will overwrite it in the next step.
 
 ### Step 2 — Copy the state dir + workspace to the new machine
 
 Copy **both**:
 
-- `$OPENCLAW_STATE_DIR` (default `~/.openclaw/`)
-- your workspace (default `~/.openclaw/workspace/`)
+- `$JONI_STATE_DIR` (default `~/.joni/`)
+- your workspace (default `~/.joni/workspace/`)
 
 Common approaches:
 
@@ -110,7 +110,7 @@ Common approaches:
 
 After copying, ensure:
 
-- Hidden directories were included (e.g. `.openclaw/`)
+- Hidden directories were included (e.g. `.joni/`)
 - File ownership is correct for the user running the gateway
 
 ### Step 3 — Run Doctor (migrations + service repair)
@@ -134,7 +134,7 @@ openclaw status
 
 ### Footgun: profile / state-dir mismatch
 
-If you ran the old gateway with a profile (or `OPENCLAW_STATE_DIR`), and the new gateway uses a different one, you’ll see symptoms like:
+If you ran the old gateway with a profile (or `JONI_STATE_DIR`), and the new gateway uses a different one, you’ll see symptoms like:
 
 - config changes not taking effect
 - channels missing / logged out
@@ -150,10 +150,10 @@ openclaw doctor
 
 `openclaw.json` is not enough. Many providers store state under:
 
-- `$OPENCLAW_STATE_DIR/credentials/`
-- `$OPENCLAW_STATE_DIR/agents/<agentId>/...`
+- `$JONI_STATE_DIR/credentials/`
+- `$JONI_STATE_DIR/agents/<agentId>/...`
 
-Always migrate the entire `$OPENCLAW_STATE_DIR` folder.
+Always migrate the entire `$JONI_STATE_DIR` folder.
 
 ### Footgun: permissions / ownership
 
@@ -170,7 +170,7 @@ If you’re in remote mode, migrate the **gateway host**.
 
 ### Footgun: secrets in backups
 
-`$OPENCLAW_STATE_DIR` contains secrets (API keys, OAuth tokens, WhatsApp creds). Treat backups like production secrets:
+`$JONI_STATE_DIR` contains secrets (API keys, OAuth tokens, WhatsApp creds). Treat backups like production secrets:
 
 - store encrypted
 - avoid sharing over insecure channels

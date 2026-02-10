@@ -49,5 +49,5 @@ Use one of these (all supported):
 
 The service target depends on OS:
 
-- macOS: LaunchAgent (`bot.molt.gateway` or `bot.molt.<profile>`; legacy `com.openclaw.*`)
+- macOS: LaunchAgent (`bot.molt.gateway` or `bot.molt.<profile>`; legacy `com.joni.*`)
 - Linux/WSL2: systemd user service (`openclaw-gateway[-<profile>].service`)

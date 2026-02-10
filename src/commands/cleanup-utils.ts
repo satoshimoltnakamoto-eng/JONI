@@ -48,7 +48,7 @@ function isUnsafeRemovalTarget(target: string): boolean {
     return true;
   }
   // Joni safety: never touch OpenClaw's state directory
-  if (home && resolved.startsWith(path.join(path.resolve(home), ".openclaw"))) {
+  if (home && resolved.startsWith(path.join(path.resolve(home), ".joni"))) {
     return true;
   }
   return false;

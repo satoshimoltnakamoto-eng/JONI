@@ -39,9 +39,9 @@ Notes:
 - Know how you installed: **global** (npm/pnpm) vs **from source** (git clone).
 - Know how your Gateway is running: **foreground terminal** vs **supervised service** (launchd/systemd).
 - Snapshot your tailoring:
-  - Config: `~/.openclaw/openclaw.json`
-  - Credentials: `~/.openclaw/credentials/`
-  - Workspace: `~/.openclaw/workspace`
+  - Config: `~/.joni/openclaw.json`
+  - Credentials: `~/.joni/credentials/`
+  - Workspace: `~/.joni/workspace`
 
 ## Update (global install)
 
@@ -170,7 +170,7 @@ openclaw logs --follow
 
 If you’re supervised:
 
-- macOS launchd (app-bundled LaunchAgent): `launchctl kickstart -k gui/$UID/bot.molt.gateway` (use `bot.molt.<profile>`; legacy `com.openclaw.*` still works)
+- macOS launchd (app-bundled LaunchAgent): `launchctl kickstart -k gui/$UID/bot.molt.gateway` (use `bot.molt.<profile>`; legacy `com.joni.*` still works)
 - Linux systemd user service: `systemctl --user restart openclaw-gateway[-<profile>].service`
 - Windows (WSL2): `systemctl --user restart openclaw-gateway[-<profile>].service`
   - `launchctl`/`systemctl` only work if the service is installed; otherwise run `openclaw gateway install`.

@@ -68,7 +68,7 @@ describe("Agent-specific sandbox config", () => {
           sandbox: {
             mode: "all",
             scope: "agent",
-            workspaceRoot: "~/.openclaw/sandboxes", // Global default
+            workspaceRoot: "~/.joni/sandboxes", // Global default
           },
         },
         list: [

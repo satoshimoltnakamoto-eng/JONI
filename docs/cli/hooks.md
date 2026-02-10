@@ -90,7 +90,7 @@ Details:
   Source: openclaw-bundled
   Path: /path/to/openclaw/hooks/bundled/session-memory/HOOK.md
   Handler: /path/to/openclaw/hooks/bundled/session-memory/handler.ts
-  Homepage: https://docs.openclaw.ai/hooks#session-memory
+  Homepage: https://docs.joni.ai/hooks#session-memory
   Events: command:new
 
 Requirements:
@@ -125,7 +125,7 @@ Not ready: 0
 openclaw hooks enable <name>
 ```
 
-Enable a specific hook by adding it to your config (`~/.openclaw/config.json`).
+Enable a specific hook by adding it to your config (`~/.joni/config.json`).
 
 **Note:** Hooks managed by plugins show `plugin:<id>` in `openclaw hooks list` and
 can’t be enabled/disabled here. Enable/disable the plugin instead.
@@ -194,7 +194,7 @@ Install a hook pack from a local folder/archive or npm.
 
 **What it does:**
 
-- Copies the hook pack into `~/.openclaw/hooks/<id>`
+- Copies the hook pack into `~/.joni/hooks/<id>`
 - Enables the installed hooks in `hooks.internal.entries.*`
 - Records the install under `hooks.internal.installs`
 
@@ -246,7 +246,7 @@ Saves session context to memory when you issue `/new`.
 openclaw hooks enable session-memory
 ```
 
-**Output:** `~/.openclaw/workspace/memory/YYYY-MM-DD-slug.md`
+**Output:** `~/.joni/workspace/memory/YYYY-MM-DD-slug.md`
 
 **See:** [session-memory documentation](/automation/hooks#session-memory)
 
@@ -260,19 +260,19 @@ Logs all command events to a centralized audit file.
 openclaw hooks enable command-logger
 ```
 
-**Output:** `~/.openclaw/logs/commands.log`
+**Output:** `~/.joni/logs/commands.log`
 
 **View logs:**
 
 ```bash
 # Recent commands
-tail -n 20 ~/.openclaw/logs/commands.log
+tail -n 20 ~/.joni/logs/commands.log
 
 # Pretty-print
-cat ~/.openclaw/logs/commands.log | jq .
+cat ~/.joni/logs/commands.log | jq .
 
 # Filter by action
-grep '"action":"new"' ~/.openclaw/logs/commands.log | jq .
+grep '"action":"new"' ~/.joni/logs/commands.log | jq .
 ```
 
 **See:** [command-logger documentation](/automation/hooks#command-logger)

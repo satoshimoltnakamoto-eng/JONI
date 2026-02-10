@@ -52,15 +52,15 @@ openclaw gateway uninstall
 3. 删除状态 + 配置：
 
 ```bash
-rm -rf "${OPENCLAW_STATE_DIR:-$HOME/.openclaw}"
+rm -rf "${JONI_STATE_DIR:-$HOME/.joni}"
 ```
 
-如果你将 `OPENCLAW_CONFIG_PATH` 设置为状态目录外的自定义位置，也请删除该文件。
+如果你将 `JONI_CONFIG_PATH` 设置为状态目录外的自定义位置，也请删除该文件。
 
 4. 删除你的工作区（可选，移除智能体文件）：
 
 ```bash
-rm -rf ~/.openclaw/workspace
+rm -rf ~/.joni/workspace
 ```
 
 5. 移除 CLI 安装（选择你使用的那个）：
@@ -79,7 +79,7 @@ rm -rf /Applications/OpenClaw.app
 
 注意事项：
 
-- 如果你使用了配置文件（`--profile` / `OPENCLAW_PROFILE`），对每个状态目录重复步骤 3（默认为 `~/.openclaw-<profile>`）。
+- 如果你使用了配置文件（`--profile` / `OPENCLAW_PROFILE`），对每个状态目录重复步骤 3（默认为 `~/.joni-<profile>`）。
 - 在远程模式下，状态目录位于 **Gateway 网关主机**上，因此也需要在那里运行步骤 1-4。
 
 ## 手动服务移除（CLI 未安装）
@@ -88,14 +88,14 @@ rm -rf /Applications/OpenClaw.app
 
 ### macOS（launchd）
 
-默认标签是 `bot.molt.gateway`（或 `bot.molt.<profile>`；旧版 `com.openclaw.*` 可能仍然存在）：
+默认标签是 `bot.molt.gateway`（或 `bot.molt.<profile>`；旧版 `com.joni.*` 可能仍然存在）：
 
 ```bash
 launchctl bootout gui/$UID/bot.molt.gateway
 rm -f ~/Library/LaunchAgents/bot.molt.gateway.plist
 ```
 
-如果你使用了配置文件，请将标签和 plist 名称替换为 `bot.molt.<profile>`。如果存在任何旧版 `com.openclaw.*` plist，请将其移除。
+如果你使用了配置文件，请将标签和 plist 名称替换为 `bot.molt.<profile>`。如果存在任何旧版 `com.joni.*` plist，请将其移除。
 
 ### Linux（systemd 用户单元）
 
@@ -114,10 +114,10 @@ systemctl --user daemon-reload
 
 ```powershell
 schtasks /Delete /F /TN "OpenClaw Gateway"
-Remove-Item -Force "$env:USERPROFILE\.openclaw\gateway.cmd"
+Remove-Item -Force "$env:USERPROFILE\.joni\gateway.cmd"
 ```
 
-如果你使用了配置文件，请删除匹配的任务名称和 `~\.openclaw-<profile>\gateway.cmd`。
+如果你使用了配置文件，请删除匹配的任务名称和 `~\.joni-<profile>\gateway.cmd`。
 
 ## 普通安装 vs 源码检出
 

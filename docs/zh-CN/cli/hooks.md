@@ -97,7 +97,7 @@ Details:
   Source: openclaw-bundled
   Path: /path/to/openclaw/hooks/bundled/session-memory/HOOK.md
   Handler: /path/to/openclaw/hooks/bundled/session-memory/handler.ts
-  Homepage: https://docs.openclaw.ai/hooks#session-memory
+  Homepage: https://docs.joni.ai/hooks#session-memory
   Events: command:new
 
 Requirements:
@@ -132,7 +132,7 @@ Not ready: 0
 openclaw hooks enable <name>
 ```
 
-通过将特定钩子添加到配置（`~/.openclaw/config.json`）来启用它。
+通过将特定钩子添加到配置（`~/.joni/config.json`）来启用它。
 
 **注意：** 由插件管理的钩子在 `openclaw hooks list` 中显示 `plugin:<id>`，
 无法在此处启用/禁用。请改为启用/禁用该插件。
@@ -201,7 +201,7 @@ openclaw hooks install <path-or-spec>
 
 **执行操作：**
 
-- 将钩子包复制到 `~/.openclaw/hooks/<id>`
+- 将钩子包复制到 `~/.joni/hooks/<id>`
 - 在 `hooks.internal.entries.*` 中启用已安装的钩子
 - 在 `hooks.internal.installs` 下记录安装信息
 
@@ -253,7 +253,7 @@ openclaw hooks update --all
 openclaw hooks enable session-memory
 ```
 
-**输出：** `~/.openclaw/workspace/memory/YYYY-MM-DD-slug.md`
+**输出：** `~/.joni/workspace/memory/YYYY-MM-DD-slug.md`
 
 **参见：** [session-memory 文档](/automation/hooks#session-memory)
 
@@ -267,19 +267,19 @@ openclaw hooks enable session-memory
 openclaw hooks enable command-logger
 ```
 
-**输出：** `~/.openclaw/logs/commands.log`
+**输出：** `~/.joni/logs/commands.log`
 
 **查看日志：**
 
 ```bash
 # 最近的命令
-tail -n 20 ~/.openclaw/logs/commands.log
+tail -n 20 ~/.joni/logs/commands.log
 
 # 格式化输出
-cat ~/.openclaw/logs/commands.log | jq .
+cat ~/.joni/logs/commands.log | jq .
 
 # 按操作过滤
-grep '"action":"new"' ~/.openclaw/logs/commands.log | jq .
+grep '"action":"new"' ~/.joni/logs/commands.log | jq .
 ```
 
 **参见：** [command-logger 文档](/automation/hooks#command-logger)

@@ -19,8 +19,8 @@ x-i18n:
 
 ## 隔离检查清单（必需）
 
-- `OPENCLAW_CONFIG_PATH` — 每个实例的配置文件
-- `OPENCLAW_STATE_DIR` — 每个实例的会话、凭证、缓存
+- `JONI_CONFIG_PATH` — 每个实例的配置文件
+- `JONI_STATE_DIR` — 每个实例的会话、凭证、缓存
 - `agents.defaults.workspace` — 每个实例的工作区根目录
 - `gateway.port`（或 `--port`）— 每个实例唯一
 - 派生端口（浏览器/画布）不得重叠
@@ -29,7 +29,7 @@ x-i18n:
 
 ## 推荐：配置文件（`--profile`）
 
-配置文件自动限定 `OPENCLAW_STATE_DIR` + `OPENCLAW_CONFIG_PATH` 范围并为服务名称添加后缀。
+配置文件自动限定 `JONI_STATE_DIR` + `JONI_CONFIG_PATH` 范围并为服务名称添加后缀。
 
 ```bash
 # main
@@ -101,12 +101,12 @@ openclaw --profile rescue gateway install
 ## 手动环境变量示例
 
 ```bash
-OPENCLAW_CONFIG_PATH=~/.openclaw/main.json \
-OPENCLAW_STATE_DIR=~/.openclaw-main \
+JONI_CONFIG_PATH=~/.joni/main.json \
+JONI_STATE_DIR=~/.joni-main \
 openclaw gateway --port 18789
 
-OPENCLAW_CONFIG_PATH=~/.openclaw/rescue.json \
-OPENCLAW_STATE_DIR=~/.openclaw-rescue \
+JONI_CONFIG_PATH=~/.joni/rescue.json \
+JONI_STATE_DIR=~/.joni-rescue \
 openclaw gateway --port 19001
 ```
 

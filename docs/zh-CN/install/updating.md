@@ -41,9 +41,9 @@ curl -fsSL https://openclaw.ai/install.sh | bash
 - 了解你的安装方式：**全局**（npm/pnpm）还是**源码**（git clone）。
 - 了解你的 Gateway 网关运行方式：**前台终端**还是**受管理服务**（launchd/systemd）。
 - 快照你的定制内容：
-  - 配置：`~/.openclaw/openclaw.json`
-  - 凭证：`~/.openclaw/credentials/`
-  - 工作区：`~/.openclaw/workspace`
+  - 配置：`~/.joni/openclaw.json`
+  - 凭证：`~/.joni/credentials/`
+  - 工作区：`~/.joni/workspace`
 
 ## 更新（全局安装）
 
@@ -172,7 +172,7 @@ openclaw logs --follow
 
 如果你使用受管理服务：
 
-- macOS launchd（应用捆绑的 LaunchAgent）：`launchctl kickstart -k gui/$UID/bot.molt.gateway`（使用 `bot.molt.<profile>`；旧版 `com.openclaw.*` 仍然有效）
+- macOS launchd（应用捆绑的 LaunchAgent）：`launchctl kickstart -k gui/$UID/bot.molt.gateway`（使用 `bot.molt.<profile>`；旧版 `com.joni.*` 仍然有效）
 - Linux systemd 用户服务：`systemctl --user restart openclaw-gateway[-<profile>].service`
 - Windows（WSL2）：`systemctl --user restart openclaw-gateway[-<profile>].service`
   - `launchctl`/`systemctl` 仅在服务已安装时有效；否则运行 `openclaw gateway install`。

@@ -32,7 +32,7 @@ macOS 应用的**安装 CLI**按钮通过 npm/pnpm 运行相同的流程（不�
 
 标签：
 
-- `bot.molt.gateway`（或 `bot.molt.<profile>`；旧版 `com.openclaw.*` 可能仍然存在）
+- `bot.molt.gateway`（或 `bot.molt.<profile>`；旧版 `com.joni.*` 可能仍然存在）
 
 Plist 位置（每用户）：
 

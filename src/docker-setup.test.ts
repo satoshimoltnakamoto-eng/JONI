@@ -66,7 +66,7 @@ describe("docker-setup.sh", () => {
     };
     delete env.OPENCLAW_DOCKER_APT_PACKAGES;
     delete env.OPENCLAW_EXTRA_MOUNTS;
-    delete env.OPENCLAW_HOME_VOLUME;
+    delete env.JONI_HOME_VOLUME;
 
     const result = spawnSync("bash", [scriptPath], {
       cwd: rootDir,
@@ -79,7 +79,7 @@ describe("docker-setup.sh", () => {
     const envFile = await readFile(join(rootDir, ".env"), "utf8");
     expect(envFile).toContain("OPENCLAW_DOCKER_APT_PACKAGES=");
     expect(envFile).toContain("OPENCLAW_EXTRA_MOUNTS=");
-    expect(envFile).toContain("OPENCLAW_HOME_VOLUME=");
+    expect(envFile).toContain("JONI_HOME_VOLUME=");
   });
 
   it("plumbs OPENCLAW_DOCKER_APT_PACKAGES into .env and docker build args", async () => {
@@ -115,7 +115,7 @@ describe("docker-setup.sh", () => {
       OPENCLAW_CONFIG_DIR: join(rootDir, "config"),
       OPENCLAW_WORKSPACE_DIR: join(rootDir, "openclaw"),
       OPENCLAW_EXTRA_MOUNTS: "",
-      OPENCLAW_HOME_VOLUME: "",
+      JONI_HOME_VOLUME: "",
     };
 
     const result = spawnSync("bash", [scriptPath], {

@@ -57,7 +57,7 @@ Docker 是**可选的**。仅当你想要容器化的 Gateway 网关或验证 Do
 
 - `OPENCLAW_DOCKER_APT_PACKAGES` — 在构建期间安装额外的 apt 包
 - `OPENCLAW_EXTRA_MOUNTS` — 添加额外的主机绑定挂载
-- `OPENCLAW_HOME_VOLUME` — 在命名卷中持久化 `/home/node`
+- `JONI_HOME_VOLUME` — 在命名卷中持久化 `/home/node`
 
 完成后：
 
@@ -67,8 +67,8 @@ Docker 是**可选的**。仅当你想要容器化的 Gateway 网关或验证 Do
 
 它在主机上写入配置/工作区：
 
-- `~/.openclaw/`
-- `~/.openclaw/workspace`
+- `~/.joni/`
+- `~/.joni/workspace`
 
 在 VPS 上运行？参阅 [Hetzner（Docker VPS）](/install/hetzner)。
 
@@ -80,7 +80,7 @@ docker compose run --rm openclaw-cli onboard
 docker compose up -d openclaw-gateway
 ```
 
-注意：从仓库根目录运行 `docker compose ...`。如果你启用了 `OPENCLAW_EXTRA_MOUNTS` 或 `OPENCLAW_HOME_VOLUME`，设置脚本会写入 `docker-compose.extra.yml`；在其他地方运行 Compose 时包含它：
+注意：从仓库根目录运行 `docker compose ...`。如果你启用了 `OPENCLAW_EXTRA_MOUNTS` 或 `JONI_HOME_VOLUME`，设置脚本会写入 `docker-compose.extra.yml`；在其他地方运行 Compose 时包含它：
 
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.extra.yml <command>
@@ -117,26 +117,26 @@ export OPENCLAW_EXTRA_MOUNTS="$HOME/.codex:/home/node/.codex:ro,$HOME/github:/ho
 
 ### 持久化整个容器 home（可选）
 
-如果你想让 `/home/node` 在容器重建后持久化，通过 `OPENCLAW_HOME_VOLUME` 设置一个命名卷。这会创建一个 Docker 卷并将其挂载到 `/home/node`，同时保持标准的配置/工作区绑定挂载。这里使用命名卷（不是绑定路径）；对于绑定挂载，使用 `OPENCLAW_EXTRA_MOUNTS`。
+如果你想让 `/home/node` 在容器重建后持久化，通过 `JONI_HOME_VOLUME` 设置一个命名卷。这会创建一个 Docker 卷并将其挂载到 `/home/node`，同时保持标准的配置/工作区绑定挂载。这里使用命名卷（不是绑定路径）；对于绑定挂载，使用 `OPENCLAW_EXTRA_MOUNTS`。
 
 示例：
 
 ```bash
-export OPENCLAW_HOME_VOLUME="openclaw_home"
+export JONI_HOME_VOLUME="openclaw_home"
 ./docker-setup.sh
 ```
 
 你可以将其与额外挂载结合使用：
 
 ```bash
-export OPENCLAW_HOME_VOLUME="openclaw_home"
+export JONI_HOME_VOLUME="openclaw_home"
 export OPENCLAW_EXTRA_MOUNTS="$HOME/.codex:/home/node/.codex:ro,$HOME/github:/home/node/github:rw"
 ./docker-setup.sh
 ```
 
 注意：
 
-- 如果你更改 `OPENCLAW_HOME_VOLUME`，重新运行 `docker-setup.sh` 以重新生成额外的 compose 文件。
+- 如果你更改 `JONI_HOME_VOLUME`，重新运行 `docker-setup.sh` 以重新生成额外的 compose 文件。
 - 命名卷会持久化直到使用 `docker volume rm <name>` 删除。
 
 ### 安装额外的 apt 包（可选）
@@ -168,7 +168,7 @@ export OPENCLAW_DOCKER_APT_PACKAGES="ffmpeg build-essential"
 1. **持久化 `/home/node`** 以便浏览器下载和工具缓存能够保留：
 
 ```bash
-export OPENCLAW_HOME_VOLUME="openclaw_home"
+export JONI_HOME_VOLUME="openclaw_home"
 ./docker-setup.sh
 ```
 
@@ -191,11 +191,11 @@ docker compose run --rm openclaw-cli \
 4. **持久化 Playwright 浏览器下载**：
 
 - 在 `docker-compose.yml` 中设置 `PLAYWRIGHT_BROWSERS_PATH=/home/node/.cache/ms-playwright`。
-- 确保 `/home/node` 通过 `OPENCLAW_HOME_VOLUME` 持久化，或通过 `OPENCLAW_EXTRA_MOUNTS` 挂载 `/home/node/.cache/ms-playwright`。
+- 确保 `/home/node` 通过 `JONI_HOME_VOLUME` 持久化，或通过 `OPENCLAW_EXTRA_MOUNTS` 挂载 `/home/node/.cache/ms-playwright`。
 
 ### 权限 + EACCES
 
-镜像以 `node`（uid 1000）运行。如果你在 `/home/node/.openclaw` 上看到权限错误，确保你的主机绑定挂载由 uid 1000 拥有。
+镜像以 `node`（uid 1000）运行。如果你在 `/home/node/.joni` 上看到权限错误，确保你的主机绑定挂载由 uid 1000 拥有。
 
 示例（Linux 主机）：
 
@@ -287,7 +287,7 @@ pnpm test:docker:qr
 
 - Gateway 网关绑定默认为 `lan` 用于容器使用。
 - Dockerfile CMD 使用 `--allow-unconfigured`；挂载的配置如果 `gateway.mode` 不是 `local` 仍会启动。覆盖 CMD 以强制执行检查。
-- Gateway 网关容器是会话的真实来源（`~/.openclaw/agents/<agentId>/sessions/`）。
+- Gateway 网关容器是会话的真实来源（`~/.joni/agents/<agentId>/sessions/`）。
 
 ## 智能体沙箱（主机 Gateway 网关 + Docker 工具）
 
@@ -320,7 +320,7 @@ pnpm test:docker:qr
 
 - 镜像：`openclaw-sandbox:bookworm-slim`
 - 每个智能体一个容器
-- 智能体工作区访问：`workspaceAccess: "none"`（默认）使用 `~/.openclaw/sandboxes`
+- 智能体工作区访问：`workspaceAccess: "none"`（默认）使用 `~/.joni/sandboxes`
   - `"ro"` 保持沙箱工作区在 `/workspace` 并将智能体工作区只读挂载在 `/agent`（禁用 `write`/`edit`/`apply_patch`）
   - `"rw"` 将智能体工作区读写挂载在 `/workspace`
 - 自动清理：空闲 > 24h 或 年龄 > 7d
@@ -345,7 +345,7 @@ pnpm test:docker:qr
         mode: "non-main", // off | non-main | all
         scope: "agent", // session | agent | shared（默认为 agent）
         workspaceAccess: "none", // none | ro | rw
-        workspaceRoot: "~/.openclaw/sandboxes",
+        workspaceRoot: "~/.joni/sandboxes",
         docker: {
           image: "openclaw-sandbox:bookworm-slim",
           workdir: "/workspace",

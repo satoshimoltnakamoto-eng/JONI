@@ -230,7 +230,7 @@ describe("buildServiceEnvironment", () => {
     expect(typeof env.OPENCLAW_SERVICE_VERSION).toBe("string");
     expect(env.OPENCLAW_SYSTEMD_UNIT).toBe("openclaw-gateway.service");
     if (process.platform === "darwin") {
-      expect(env.OPENCLAW_LAUNCHD_LABEL).toBe("ai.openclaw.gateway");
+      expect(env.OPENCLAW_LAUNCHD_LABEL).toBe("ai.joni.gateway");
     }
   });
 
@@ -241,7 +241,7 @@ describe("buildServiceEnvironment", () => {
     });
     expect(env.OPENCLAW_SYSTEMD_UNIT).toBe("openclaw-gateway-work.service");
     if (process.platform === "darwin") {
-      expect(env.OPENCLAW_LAUNCHD_LABEL).toBe("ai.openclaw.work");
+      expect(env.OPENCLAW_LAUNCHD_LABEL).toBe("ai.joni.work");
     }
   });
 });

@@ -88,7 +88,7 @@ async function setupGatewayTestHome() {
   tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gateway-home-"));
   process.env.HOME = tempHome;
   process.env.USERPROFILE = tempHome;
-  process.env.JONI_STATE_DIR = path.join(tempHome, ".openclaw");
+  process.env.JONI_STATE_DIR = path.join(tempHome, ".joni");
   delete process.env.JONI_CONFIG_PATH;
 }
 
@@ -111,7 +111,7 @@ async function resetGatewayTestState(options: { uniqueConfigRoot: boolean }) {
   applyGatewaySkipEnv();
   tempConfigRoot = options.uniqueConfigRoot
     ? await fs.mkdtemp(path.join(tempHome, "openclaw-test-"))
-    : path.join(tempHome, ".openclaw-test");
+    : path.join(tempHome, ".joni-test");
   setTestConfigRoot(tempConfigRoot);
   sessionStoreSaveDelayMs.value = 0;
   testTailnetIPv4.value = undefined;

@@ -31,8 +31,8 @@ type OnboardEnv = {
 function captureEnv(): EnvSnapshot {
   return {
     home: process.env.HOME,
-    stateDir: process.env.OPENCLAW_STATE_DIR,
-    configPath: process.env.OPENCLAW_CONFIG_PATH,
+    stateDir: process.env.JONI_STATE_DIR,
+    configPath: process.env.JONI_CONFIG_PATH,
     skipChannels: process.env.OPENCLAW_SKIP_CHANNELS,
     skipGmail: process.env.OPENCLAW_SKIP_GMAIL_WATCHER,
     skipCron: process.env.OPENCLAW_SKIP_CRON,
@@ -53,8 +53,8 @@ function restoreEnvVar(key: keyof NodeJS.ProcessEnv, value: string | undefined):
 
 function restoreEnv(prev: EnvSnapshot): void {
   restoreEnvVar("HOME", prev.home);
-  restoreEnvVar("OPENCLAW_STATE_DIR", prev.stateDir);
-  restoreEnvVar("OPENCLAW_CONFIG_PATH", prev.configPath);
+  restoreEnvVar("JONI_STATE_DIR", prev.stateDir);
+  restoreEnvVar("JONI_CONFIG_PATH", prev.configPath);
   restoreEnvVar("OPENCLAW_SKIP_CHANNELS", prev.skipChannels);
   restoreEnvVar("OPENCLAW_SKIP_GMAIL_WATCHER", prev.skipGmail);
   restoreEnvVar("OPENCLAW_SKIP_CRON", prev.skipCron);
@@ -81,8 +81,8 @@ async function withOnboardEnv(
   const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), prefix));
   const configPath = path.join(tempHome, "openclaw.json");
   process.env.HOME = tempHome;
-  process.env.OPENCLAW_STATE_DIR = tempHome;
-  process.env.OPENCLAW_CONFIG_PATH = configPath;
+  process.env.JONI_STATE_DIR = tempHome;
+  process.env.JONI_CONFIG_PATH = configPath;
   vi.resetModules();
 
   const runtime: RuntimeMock = {

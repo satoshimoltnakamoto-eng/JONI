@@ -51,7 +51,7 @@ For tool call behavior, prompt for a `read` or `exec` action so you can see tool
 
 ## Clean Slate Reset
 
-State lives under the OpenClaw state directory. Default is `~/.openclaw`. If `OPENCLAW_STATE_DIR` is set, use that directory instead.
+State lives under the OpenClaw state directory. Default is `~/.joni`. If `JONI_STATE_DIR` is set, use that directory instead.
 
 To reset everything:
 
@@ -66,5 +66,5 @@ If you only want to reset sessions, delete `agents/<agentId>/sessions/` and `age
 
 ## References
 
-- [https://docs.openclaw.ai/testing](https://docs.openclaw.ai/testing)
-- [https://docs.openclaw.ai/start/getting-started](https://docs.openclaw.ai/start/getting-started)
+- [https://docs.joni.ai/testing](https://docs.joni.ai/testing)
+- [https://docs.joni.ai/start/getting-started](https://docs.joni.ai/start/getting-started)

@@ -36,7 +36,7 @@ macOS 应用是 OpenClaw 的**菜单栏配套应用**。它拥有权限，在本
 
 ## Launchd 控制
 
-应用管理一个标记为 `bot.molt.gateway` 的每用户 LaunchAgent（使用 `--profile`/`OPENCLAW_PROFILE` 时为 `bot.molt.<profile>`；旧版 `com.openclaw.*` 仍会卸载）。
+应用管理一个标记为 `bot.molt.gateway` 的每用户 LaunchAgent（使用 `--profile`/`OPENCLAW_PROFILE` 时为 `bot.molt.<profile>`；旧版 `com.joni.*` 仍会卸载）。
 
 ```bash
 launchctl kickstart -k gui/$UID/bot.molt.gateway
@@ -77,7 +77,7 @@ Gateway -> Node Service (WS)
 `system.run` 由 macOS 应用中的 **Exec 审批**控制（设置 → Exec approvals）。安全 + 询问 + 允许列表本地存储在 Mac 上：
 
 ```
-~/.openclaw/exec-approvals.json
+~/.joni/exec-approvals.json
 ```
 
 示例：

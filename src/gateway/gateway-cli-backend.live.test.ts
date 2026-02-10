@@ -204,7 +204,7 @@ async function connectClient(params: { url: string; token: string }) {
 describeLive("gateway live (cli backend)", () => {
   it("runs the agent pipeline against the local CLI backend", async () => {
     const previous = {
-      configPath: process.env.OPENCLAW_CONFIG_PATH,
+      configPath: process.env.JONI_CONFIG_PATH,
       token: process.env.OPENCLAW_GATEWAY_TOKEN,
       skipChannels: process.env.OPENCLAW_SKIP_CHANNELS,
       skipGmail: process.env.OPENCLAW_SKIP_GMAIL_WATCHER,
@@ -306,7 +306,7 @@ describeLive("gateway live (cli backend)", () => {
     };
     const tempConfigPath = path.join(tempDir, "openclaw.json");
     await fs.writeFile(tempConfigPath, `${JSON.stringify(nextCfg, null, 2)}\n`);
-    process.env.OPENCLAW_CONFIG_PATH = tempConfigPath;
+    process.env.JONI_CONFIG_PATH = tempConfigPath;
 
     const port = await getFreeGatewayPort();
     const server = await startGatewayServer(port, {
@@ -425,9 +425,9 @@ describeLive("gateway live (cli backend)", () => {
       await server.close();
       await fs.rm(tempDir, { recursive: true, force: true });
       if (previous.configPath === undefined) {
-        delete process.env.OPENCLAW_CONFIG_PATH;
+        delete process.env.JONI_CONFIG_PATH;
       } else {
-        process.env.OPENCLAW_CONFIG_PATH = previous.configPath;
+        process.env.JONI_CONFIG_PATH = previous.configPath;
       }
       if (previous.token === undefined) {
         delete process.env.OPENCLAW_GATEWAY_TOKEN;

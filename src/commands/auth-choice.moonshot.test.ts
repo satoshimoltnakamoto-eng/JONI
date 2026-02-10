@@ -18,7 +18,7 @@ const requireAgentDir = () => {
 };
 
 describe("applyAuthChoice (moonshot)", () => {
-  const previousStateDir = process.env.OPENCLAW_STATE_DIR;
+  const previousStateDir = process.env.JONI_STATE_DIR;
   const previousAgentDir = process.env.OPENCLAW_AGENT_DIR;
   const previousPiAgentDir = process.env.PI_CODING_AGENT_DIR;
   const previousMoonshotKey = process.env.MOONSHOT_API_KEY;
@@ -30,9 +30,9 @@ describe("applyAuthChoice (moonshot)", () => {
       tempStateDir = null;
     }
     if (previousStateDir === undefined) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.JONI_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = previousStateDir;
+      process.env.JONI_STATE_DIR = previousStateDir;
     }
     if (previousAgentDir === undefined) {
       delete process.env.OPENCLAW_AGENT_DIR;
@@ -53,7 +53,7 @@ describe("applyAuthChoice (moonshot)", () => {
 
   it("keeps the .cn baseUrl when setDefaultModel is false", async () => {
     tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-"));
-    process.env.OPENCLAW_STATE_DIR = tempStateDir;
+    process.env.JONI_STATE_DIR = tempStateDir;
     process.env.OPENCLAW_AGENT_DIR = path.join(tempStateDir, "agent");
     process.env.PI_CODING_AGENT_DIR = process.env.OPENCLAW_AGENT_DIR;
     delete process.env.MOONSHOT_API_KEY;
@@ -108,7 +108,7 @@ describe("applyAuthChoice (moonshot)", () => {
 
   it("sets the default model when setDefaultModel is true", async () => {
     tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-"));
-    process.env.OPENCLAW_STATE_DIR = tempStateDir;
+    process.env.JONI_STATE_DIR = tempStateDir;
     process.env.OPENCLAW_AGENT_DIR = path.join(tempStateDir, "agent");
     process.env.PI_CODING_AGENT_DIR = process.env.OPENCLAW_AGENT_DIR;
     delete process.env.MOONSHOT_API_KEY;

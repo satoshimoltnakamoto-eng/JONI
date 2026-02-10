@@ -34,7 +34,7 @@ openclaw gateway --force
 pnpm gateway:watch
 ```
 
-- 配置热重载监视 `~/.openclaw/openclaw.json`（或 `OPENCLAW_CONFIG_PATH`）。
+- 配置热重载监视 `~/.joni/openclaw.json`（或 `JONI_CONFIG_PATH`）。
   - 默认模式：`gateway.reload.mode="hybrid"`（热应用安全更改，关键更改时重启）。
   - 热重载在需要时通过 **SIGUSR1** 使用进程内重启。
   - 使用 `gateway.reload.mode="off"` 禁用。
@@ -43,7 +43,7 @@ pnpm gateway:watch
   - OpenAI Chat Completions（HTTP）：[`/v1/chat/completions`](/gateway/openai-http-api)。
   - OpenResponses（HTTP）：[`/v1/responses`](/gateway/openresponses-http-api)。
   - Tools Invoke（HTTP）：[`/tools/invoke`](/gateway/tools-invoke-http-api)。
-- 默认在 `canvasHost.port`（默认 `18793`）上启动 Canvas 文件服务器，从 `~/.openclaw/workspace/canvas` 提供 `http://<gateway-host>:18793/__openclaw__/canvas/`。使用 `canvasHost.enabled=false` 或 `OPENCLAW_SKIP_CANVAS_HOST=1` 禁用。
+- 默认在 `canvasHost.port`（默认 `18793`）上启动 Canvas 文件服务器，从 `~/.joni/workspace/canvas` 提供 `http://<gateway-host>:18793/__openclaw__/canvas/`。使用 `canvasHost.enabled=false` 或 `OPENCLAW_SKIP_CANVAS_HOST=1` 禁用。
 - 输出日志到 stdout；使用 launchd/systemd 保持运行并轮转日志。
 - 故障排除时传递 `--verbose` 以将调试日志（握手、请求/响应、事件）从日志文件镜像到 stdio。
 - `--force` 使用 `lsof` 查找所选端口上的监听器，发送 SIGTERM，记录它终止了什么，然后启动 Gateway 网关（如果缺少 `lsof` 则快速失败）。
@@ -70,7 +70,7 @@ pnpm gateway:watch
 
 服务名称是配置文件感知的：
 
-- macOS：`bot.molt.<profile>`（旧版 `com.openclaw.*` 可能仍然存在）
+- macOS：`bot.molt.<profile>`（旧版 `com.joni.*` 可能仍然存在）
 - Linux：`openclaw-gateway-<profile>.service`
 - Windows：`OpenClaw Gateway (<profile>)`
 
@@ -96,12 +96,12 @@ openclaw --dev health
 
 默认值（可通过 env/flags/config 覆盖）：
 
-- `OPENCLAW_STATE_DIR=~/.openclaw-dev`
-- `OPENCLAW_CONFIG_PATH=~/.openclaw-dev/openclaw.json`
+- `JONI_STATE_DIR=~/.joni-dev`
+- `JONI_CONFIG_PATH=~/.joni-dev/openclaw.json`
 - `OPENCLAW_GATEWAY_PORT=19001`（Gateway 网关 WS + HTTP）
 - 浏览器控制服务端口 = `19003`（派生：`gateway.port+2`，仅 loopback）
 - `canvasHost.port=19005`（派生：`gateway.port+4`）
-- 当你在 `--dev` 下运行 `setup`/`onboard` 时，`agents.defaults.workspace` 默认变为 `~/.openclaw/workspace-dev`。
+- 当你在 `--dev` 下运行 `setup`/`onboard` 时，`agents.defaults.workspace` 默认变为 `~/.joni/workspace-dev`。
 
 派生端口（经验法则）：
 
@@ -113,8 +113,8 @@ openclaw --dev health
 每个实例的检查清单：
 
 - 唯一的 `gateway.port`
-- 唯一的 `OPENCLAW_CONFIG_PATH`
-- 唯一的 `OPENCLAW_STATE_DIR`
+- 唯一的 `JONI_CONFIG_PATH`
+- 唯一的 `JONI_STATE_DIR`
 - 唯一的 `agents.defaults.workspace`
 - 单独的 WhatsApp 号码（如果使用 WA）
 
@@ -128,8 +128,8 @@ openclaw --profile rescue gateway install
 示例：
 
 ```bash
-OPENCLAW_CONFIG_PATH=~/.openclaw/a.json OPENCLAW_STATE_DIR=~/.openclaw-a openclaw gateway --port 19001
-OPENCLAW_CONFIG_PATH=~/.openclaw/b.json OPENCLAW_STATE_DIR=~/.openclaw-b openclaw gateway --port 19002
+JONI_CONFIG_PATH=~/.joni/a.json JONI_STATE_DIR=~/.joni-a openclaw gateway --port 19001
+JONI_CONFIG_PATH=~/.joni/b.json JONI_STATE_DIR=~/.joni-b openclaw gateway --port 19002
 ```
 
 ## 协议（运维视角）
@@ -212,7 +212,7 @@ OPENCLAW_CONFIG_PATH=~/.openclaw/b.json OPENCLAW_STATE_DIR=~/.openclaw-b opencla
 - 失败时，launchd 重启；致命的配置错误应保持退出，以便运维人员注意到。
 - LaunchAgents 是按用户的，需要已登录的会话；对于无头设置，使用自定义 LaunchDaemon（未随附）。
   - `openclaw gateway install` 写入 `~/Library/LaunchAgents/bot.molt.gateway.plist`
-    （或 `bot.molt.<profile>.plist`；旧版 `com.openclaw.*` 会被清理）。
+    （或 `bot.molt.<profile>.plist`；旧版 `com.joni.*` 会被清理）。
   - `openclaw doctor` 审计 LaunchAgent 配置，可以将其更新为当前默认值。
 
 ## Gateway 网关服务管理（CLI）
@@ -245,7 +245,7 @@ openclaw logs --follow
 捆绑的 mac 应用：
 
 - OpenClaw.app 可以捆绑基于 Node 的 Gateway 网关中继并安装标记为
-  `bot.molt.gateway`（或 `bot.molt.<profile>`；旧版 `com.openclaw.*` 标签仍能干净卸载）的按用户 LaunchAgent。
+  `bot.molt.gateway`（或 `bot.molt.<profile>`；旧版 `com.joni.*` 标签仍能干净卸载）的按用户 LaunchAgent。
 - 要干净地停止它，使用 `openclaw gateway stop`（或 `launchctl bootout gui/$UID/bot.molt.gateway`）。
 - 要重启，使用 `openclaw gateway restart`（或 `launchctl kickstart -k gui/$UID/bot.molt.gateway`）。
   - `launchctl` 仅在 LaunchAgent 已安装时有效；否则先使用 `openclaw gateway install`。

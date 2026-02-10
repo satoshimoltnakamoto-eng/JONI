@@ -27,7 +27,7 @@ openclaw gateway --force
 pnpm gateway:watch
 ```
 
-- Config hot reload watches `~/.openclaw/openclaw.json` (or `OPENCLAW_CONFIG_PATH`).
+- Config hot reload watches `~/.joni/openclaw.json` (or `JONI_CONFIG_PATH`).
   - Default mode: `gateway.reload.mode="hybrid"` (hot-apply safe changes, restart on critical).
   - Hot reload uses in-process restart via **SIGUSR1** when needed.
   - Disable with `gateway.reload.mode="off"`.
@@ -36,7 +36,7 @@ pnpm gateway:watch
   - OpenAI Chat Completions (HTTP): [`/v1/chat/completions`](/gateway/openai-http-api).
   - OpenResponses (HTTP): [`/v1/responses`](/gateway/openresponses-http-api).
   - Tools Invoke (HTTP): [`/tools/invoke`](/gateway/tools-invoke-http-api).
-- Starts a Canvas file server by default on `canvasHost.port` (default `18793`), serving `http://<gateway-host>:18793/__openclaw__/canvas/` from `~/.openclaw/workspace/canvas`. Disable with `canvasHost.enabled=false` or `OPENCLAW_SKIP_CANVAS_HOST=1`.
+- Starts a Canvas file server by default on `canvasHost.port` (default `18793`), serving `http://<gateway-host>:18793/__openclaw__/canvas/` from `~/.joni/workspace/canvas`. Disable with `canvasHost.enabled=false` or `OPENCLAW_SKIP_CANVAS_HOST=1`.
 - Logs to stdout; use launchd/systemd to keep it alive and rotate logs.
 - Pass `--verbose` to mirror debug logging (handshakes, req/res, events) from the log file into stdio when troubleshooting.
 - `--force` uses `lsof` to find listeners on the chosen port, sends SIGTERM, logs what it killed, then starts the gateway (fails fast if `lsof` is missing).
@@ -65,7 +65,7 @@ Supported if you isolate state + config and use unique ports. Full guide: [Multi
 
 Service names are profile-aware:
 
-- macOS: `bot.molt.<profile>` (legacy `com.openclaw.*` may still exist)
+- macOS: `bot.molt.<profile>` (legacy `com.joni.*` may still exist)
 - Linux: `openclaw-gateway-<profile>.service`
 - Windows: `OpenClaw Gateway (<profile>)`
 
@@ -91,12 +91,12 @@ openclaw --dev health
 
 Defaults (can be overridden via env/flags/config):
 
-- `OPENCLAW_STATE_DIR=~/.openclaw-dev`
-- `OPENCLAW_CONFIG_PATH=~/.openclaw-dev/openclaw.json`
+- `JONI_STATE_DIR=~/.joni-dev`
+- `JONI_CONFIG_PATH=~/.joni-dev/openclaw.json`
 - `OPENCLAW_GATEWAY_PORT=19001` (Gateway WS + HTTP)
 - browser control service port = `19003` (derived: `gateway.port+2`, loopback only)
 - `canvasHost.port=19005` (derived: `gateway.port+4`)
-- `agents.defaults.workspace` default becomes `~/.openclaw/workspace-dev` when you run `setup`/`onboard` under `--dev`.
+- `agents.defaults.workspace` default becomes `~/.joni/workspace-dev` when you run `setup`/`onboard` under `--dev`.
 
 Derived ports (rules of thumb):
 
@@ -108,8 +108,8 @@ Derived ports (rules of thumb):
 Checklist per instance:
 
 - unique `gateway.port`
-- unique `OPENCLAW_CONFIG_PATH`
-- unique `OPENCLAW_STATE_DIR`
+- unique `JONI_CONFIG_PATH`
+- unique `JONI_STATE_DIR`
 - unique `agents.defaults.workspace`
 - separate WhatsApp numbers (if using WA)
 
@@ -123,8 +123,8 @@ openclaw --profile rescue gateway install
 Example:
 
 ```bash
-OPENCLAW_CONFIG_PATH=~/.openclaw/a.json OPENCLAW_STATE_DIR=~/.openclaw-a openclaw gateway --port 19001
-OPENCLAW_CONFIG_PATH=~/.openclaw/b.json OPENCLAW_STATE_DIR=~/.openclaw-b openclaw gateway --port 19002
+JONI_CONFIG_PATH=~/.joni/a.json JONI_STATE_DIR=~/.joni-a openclaw gateway --port 19001
+JONI_CONFIG_PATH=~/.joni/b.json JONI_STATE_DIR=~/.joni-b openclaw gateway --port 19002
 ```
 
 ## Protocol (operator view)
@@ -207,7 +207,7 @@ See also: [Presence](/concepts/presence) for how presence is produced/deduped an
 - On failure, launchd restarts; fatal misconfig should keep exiting so the operator notices.
 - LaunchAgents are per-user and require a logged-in session; for headless setups use a custom LaunchDaemon (not shipped).
   - `openclaw gateway install` writes `~/Library/LaunchAgents/bot.molt.gateway.plist`
-    (or `bot.molt.<profile>.plist`; legacy `com.openclaw.*` is cleaned up).
+    (or `bot.molt.<profile>.plist`; legacy `com.joni.*` is cleaned up).
   - `openclaw doctor` audits the LaunchAgent config and can update it to current defaults.
 
 ## Gateway service management (CLI)
@@ -240,7 +240,7 @@ Notes:
 Bundled mac app:
 
 - OpenClaw.app can bundle a Node-based gateway relay and install a per-user LaunchAgent labeled
-  `bot.molt.gateway` (or `bot.molt.<profile>`; legacy `com.openclaw.*` labels still unload cleanly).
+  `bot.molt.gateway` (or `bot.molt.<profile>`; legacy `com.joni.*` labels still unload cleanly).
 - To stop it cleanly, use `openclaw gateway stop` (or `launchctl bootout gui/$UID/bot.molt.gateway`).
 - To restart, use `openclaw gateway restart` (or `launchctl kickstart -k gui/$UID/bot.molt.gateway`).
   - `launchctl` only works if the LaunchAgent is installed; otherwise use `openclaw gateway install` first.

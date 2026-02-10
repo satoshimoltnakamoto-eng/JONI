@@ -13,13 +13,13 @@ const oauthFixture = {
 
 describe("getApiKeyForModel", () => {
   it("migrates legacy oauth.json into auth-profiles.json", async () => {
-    const previousStateDir = process.env.OPENCLAW_STATE_DIR;
+    const previousStateDir = process.env.JONI_STATE_DIR;
     const previousAgentDir = process.env.OPENCLAW_AGENT_DIR;
     const previousPiAgentDir = process.env.PI_CODING_AGENT_DIR;
     const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-oauth-"));
 
     try {
-      process.env.OPENCLAW_STATE_DIR = tempDir;
+      process.env.JONI_STATE_DIR = tempDir;
       process.env.OPENCLAW_AGENT_DIR = path.join(tempDir, "agent");
       process.env.PI_CODING_AGENT_DIR = process.env.OPENCLAW_AGENT_DIR;
 
@@ -76,9 +76,9 @@ describe("getApiKeyForModel", () => {
       });
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.OPENCLAW_STATE_DIR;
+        delete process.env.JONI_STATE_DIR;
       } else {
-        process.env.OPENCLAW_STATE_DIR = previousStateDir;
+        process.env.JONI_STATE_DIR = previousStateDir;
       }
       if (previousAgentDir === undefined) {
         delete process.env.OPENCLAW_AGENT_DIR;
@@ -95,7 +95,7 @@ describe("getApiKeyForModel", () => {
   });
 
   it("suggests openai-codex when only Codex OAuth is configured", async () => {
-    const previousStateDir = process.env.OPENCLAW_STATE_DIR;
+    const previousStateDir = process.env.JONI_STATE_DIR;
     const previousAgentDir = process.env.OPENCLAW_AGENT_DIR;
     const previousPiAgentDir = process.env.PI_CODING_AGENT_DIR;
     const previousOpenAiKey = process.env.OPENAI_API_KEY;
@@ -103,7 +103,7 @@ describe("getApiKeyForModel", () => {
 
     try {
       delete process.env.OPENAI_API_KEY;
-      process.env.OPENCLAW_STATE_DIR = tempDir;
+      process.env.JONI_STATE_DIR = tempDir;
       process.env.OPENCLAW_AGENT_DIR = path.join(tempDir, "agent");
       process.env.PI_CODING_AGENT_DIR = process.env.OPENCLAW_AGENT_DIR;
 
@@ -148,9 +148,9 @@ describe("getApiKeyForModel", () => {
         process.env.OPENAI_API_KEY = previousOpenAiKey;
       }
       if (previousStateDir === undefined) {
-        delete process.env.OPENCLAW_STATE_DIR;
+        delete process.env.JONI_STATE_DIR;
       } else {
-        process.env.OPENCLAW_STATE_DIR = previousStateDir;
+        process.env.JONI_STATE_DIR = previousStateDir;
       }
       if (previousAgentDir === undefined) {
         delete process.env.OPENCLAW_AGENT_DIR;

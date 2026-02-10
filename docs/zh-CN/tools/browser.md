@@ -55,7 +55,7 @@ openclaw browser --browser-profile openclaw snapshot
 
 ## 配置
 
-浏览器设置位于 `~/.openclaw/openclaw.json`。
+浏览器设置位于 `~/.joni/openclaw.json`。
 
 ```json5
 {
@@ -321,7 +321,7 @@ docker compose run --rm openclaw-cli \
   node /app/node_modules/playwright-core/cli.js install chromium
 ```
 
-要持久化浏览器下载，设置 `PLAYWRIGHT_BROWSERS_PATH`（例如 `/home/node/.cache/ms-playwright`）并确保 `/home/node` 通过 `OPENCLAW_HOME_VOLUME` 或绑定挂载持久化。参见 [Docker](/install/docker)。
+要持久化浏览器下载，设置 `PLAYWRIGHT_BROWSERS_PATH`（例如 `/home/node/.cache/ms-playwright`）并确保 `/home/node` 通过 `JONI_HOME_VOLUME` 或绑定挂载持久化。参见 [Docker](/install/docker)。
 
 ## 工作原理（内部）
 

@@ -50,7 +50,7 @@ Optional env vars:
 
 - `OPENCLAW_DOCKER_APT_PACKAGES` — install extra apt packages during build
 - `OPENCLAW_EXTRA_MOUNTS` — add extra host bind mounts
-- `OPENCLAW_HOME_VOLUME` — persist `/home/node` in a named volume
+- `JONI_HOME_VOLUME` — persist `/home/node` in a named volume
 
 After it finishes:
 
@@ -60,8 +60,8 @@ After it finishes:
 
 It writes config/workspace on the host:
 
-- `~/.openclaw/`
-- `~/.openclaw/workspace`
+- `~/.joni/`
+- `~/.joni/workspace`
 
 Running on a VPS? See [Hetzner (Docker VPS)](/install/hetzner).
 
@@ -74,7 +74,7 @@ docker compose up -d openclaw-gateway
 ```
 
 Note: run `docker compose ...` from the repo root. If you enabled
-`OPENCLAW_EXTRA_MOUNTS` or `OPENCLAW_HOME_VOLUME`, the setup script writes
+`OPENCLAW_EXTRA_MOUNTS` or `JONI_HOME_VOLUME`, the setup script writes
 `docker-compose.extra.yml`; include it when running Compose elsewhere:
 
 ```bash
@@ -118,7 +118,7 @@ Notes:
 ### Persist the entire container home (optional)
 
 If you want `/home/node` to persist across container recreation, set a named
-volume via `OPENCLAW_HOME_VOLUME`. This creates a Docker volume and mounts it at
+volume via `JONI_HOME_VOLUME`. This creates a Docker volume and mounts it at
 `/home/node`, while keeping the standard config/workspace bind mounts. Use a
 named volume here (not a bind path); for bind mounts, use
 `OPENCLAW_EXTRA_MOUNTS`.
@@ -126,21 +126,21 @@ named volume here (not a bind path); for bind mounts, use
 Example:
 
 ```bash
-export OPENCLAW_HOME_VOLUME="openclaw_home"
+export JONI_HOME_VOLUME="openclaw_home"
 ./docker-setup.sh
 ```
 
 You can combine this with extra mounts:
 
 ```bash
-export OPENCLAW_HOME_VOLUME="openclaw_home"
+export JONI_HOME_VOLUME="openclaw_home"
 export OPENCLAW_EXTRA_MOUNTS="$HOME/.codex:/home/node/.codex:ro,$HOME/github:/home/node/github:rw"
 ./docker-setup.sh
 ```
 
 Notes:
 
-- If you change `OPENCLAW_HOME_VOLUME`, rerun `docker-setup.sh` to regenerate the
+- If you change `JONI_HOME_VOLUME`, rerun `docker-setup.sh` to regenerate the
   extra compose file.
 - The named volume persists until removed with `docker volume rm <name>`.
 
@@ -178,7 +178,7 @@ If you want a more full-featured container, use these opt-in knobs:
 1. **Persist `/home/node`** so browser downloads and tool caches survive:
 
 ```bash
-export OPENCLAW_HOME_VOLUME="openclaw_home"
+export JONI_HOME_VOLUME="openclaw_home"
 ./docker-setup.sh
 ```
 
@@ -203,13 +203,13 @@ If you need Playwright to install system deps, rebuild the image with
 
 - Set `PLAYWRIGHT_BROWSERS_PATH=/home/node/.cache/ms-playwright` in
   `docker-compose.yml`.
-- Ensure `/home/node` persists via `OPENCLAW_HOME_VOLUME`, or mount
+- Ensure `/home/node` persists via `JONI_HOME_VOLUME`, or mount
   `/home/node/.cache/ms-playwright` via `OPENCLAW_EXTRA_MOUNTS`.
 
 ### Permissions + EACCES
 
 The image runs as `node` (uid 1000). If you see permission errors on
-`/home/node/.openclaw`, make sure your host bind mounts are owned by uid 1000.
+`/home/node/.joni`, make sure your host bind mounts are owned by uid 1000.
 
 Example (Linux host):
 
@@ -305,7 +305,7 @@ pnpm test:docker:qr
 
 - Gateway bind defaults to `lan` for container use.
 - Dockerfile CMD uses `--allow-unconfigured`; mounted config with `gateway.mode` not `local` will still start. Override CMD to enforce the guard.
-- The gateway container is the source of truth for sessions (`~/.openclaw/agents/<agentId>/sessions/`).
+- The gateway container is the source of truth for sessions (`~/.joni/agents/<agentId>/sessions/`).
 
 ## Agent Sandbox (host gateway + Docker tools)
 
@@ -343,7 +343,7 @@ precedence, and troubleshooting.
 
 - Image: `openclaw-sandbox:bookworm-slim`
 - One container per agent
-- Agent workspace access: `workspaceAccess: "none"` (default) uses `~/.openclaw/sandboxes`
+- Agent workspace access: `workspaceAccess: "none"` (default) uses `~/.joni/sandboxes`
   - `"ro"` keeps the sandbox workspace at `/workspace` and mounts the agent workspace read-only at `/agent` (disables `write`/`edit`/`apply_patch`)
   - `"rw"` mounts the agent workspace read/write at `/workspace`
 - Auto-prune: idle > 24h OR age > 7d
@@ -370,7 +370,7 @@ If you plan to install packages in `setupCommand`, note:
         mode: "non-main", // off | non-main | all
         scope: "agent", // session | agent | shared (agent is default)
         workspaceAccess: "none", // none | ro | rw
-        workspaceRoot: "~/.openclaw/sandboxes",
+        workspaceRoot: "~/.joni/sandboxes",
         docker: {
           image: "openclaw-sandbox:bookworm-slim",
           workdir: "/workspace",

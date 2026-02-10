@@ -10,13 +10,13 @@ import { A2UI_PATH, CANVAS_HOST_PATH, CANVAS_WS_PATH } from "../canvas-host/a2ui
 import { attachGatewayUpgradeHandler, createGatewayHttpServer } from "./server-http.js";
 
 async function withTempConfig(params: { cfg: unknown; run: () => Promise<void> }): Promise<void> {
-  const prevConfigPath = process.env.OPENCLAW_CONFIG_PATH;
+  const prevConfigPath = process.env.JONI_CONFIG_PATH;
   const prevDisableCache = process.env.OPENCLAW_DISABLE_CONFIG_CACHE;
 
   const dir = await mkdtemp(path.join(os.tmpdir(), "openclaw-canvas-auth-test-"));
   const configPath = path.join(dir, "openclaw.json");
 
-  process.env.OPENCLAW_CONFIG_PATH = configPath;
+  process.env.JONI_CONFIG_PATH = configPath;
   process.env.OPENCLAW_DISABLE_CONFIG_CACHE = "1";
 
   try {
@@ -24,9 +24,9 @@ async function withTempConfig(params: { cfg: unknown; run: () => Promise<void> }
     await params.run();
   } finally {
     if (prevConfigPath === undefined) {
-      delete process.env.OPENCLAW_CONFIG_PATH;
+      delete process.env.JONI_CONFIG_PATH;
     } else {
-      process.env.OPENCLAW_CONFIG_PATH = prevConfigPath;
+      process.env.JONI_CONFIG_PATH = prevConfigPath;
     }
     if (prevDisableCache === undefined) {
       delete process.env.OPENCLAW_DISABLE_CONFIG_CACHE;

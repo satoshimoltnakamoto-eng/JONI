@@ -35,70 +35,65 @@ describe("Nix integration (U3, U5, U9)", () => {
   });
 
   describe("U5: CONFIG_PATH and STATE_DIR env var overrides", () => {
-    it("STATE_DIR defaults to ~/.openclaw when env not set", async () => {
-      await withEnvOverride({ OPENCLAW_STATE_DIR: undefined }, async () => {
+    it("STATE_DIR defaults to ~/.joni when env not set", async () => {
+      await withEnvOverride({ JONI_STATE_DIR: undefined }, async () => {
         const { STATE_DIR } = await import("./config.js");
-        expect(STATE_DIR).toMatch(/\.openclaw$/);
+        expect(STATE_DIR).toMatch(/\.joni$/);
       });
     });
 
-    it("STATE_DIR respects OPENCLAW_STATE_DIR override", async () => {
-      await withEnvOverride({ OPENCLAW_STATE_DIR: "/custom/state/dir" }, async () => {
+    it("STATE_DIR respects JONI_STATE_DIR override", async () => {
+      await withEnvOverride({ JONI_STATE_DIR: "/custom/state/dir" }, async () => {
         const { STATE_DIR } = await import("./config.js");
         expect(STATE_DIR).toBe(path.resolve("/custom/state/dir"));
       });
     });
 
-    it("STATE_DIR respects OPENCLAW_HOME when state override is unset", async () => {
+    it("STATE_DIR respects JONI_HOME when state override is unset", async () => {
       const customHome = path.join(path.sep, "custom", "home");
-      await withEnvOverride(
-        { OPENCLAW_HOME: customHome, OPENCLAW_STATE_DIR: undefined },
-        async () => {
-          const { STATE_DIR } = await import("./config.js");
-          expect(STATE_DIR).toBe(path.join(path.resolve(customHome), ".openclaw"));
-        },
-      );
+      await withEnvOverride({ JONI_HOME: customHome, JONI_STATE_DIR: undefined }, async () => {
+        const { STATE_DIR } = await import("./config.js");
+        expect(STATE_DIR).toBe(path.join(path.resolve(customHome), ".joni"));
+      });
     });
 
-    it("CONFIG_PATH defaults to OPENCLAW_HOME/.openclaw/openclaw.json", async () => {
+    it("CONFIG_PATH defaults to JONI_HOME/.joni/openclaw.json", async () => {
       const customHome = path.join(path.sep, "custom", "home");
       await withEnvOverride(
         {
-          OPENCLAW_HOME: customHome,
-          OPENCLAW_CONFIG_PATH: undefined,
-          OPENCLAW_STATE_DIR: undefined,
+          JONI_HOME: customHome,
+          JONI_CONFIG_PATH: undefined,
+          JONI_STATE_DIR: undefined,
         },
         async () => {
           const { CONFIG_PATH } = await import("./config.js");
-          expect(CONFIG_PATH).toBe(
-            path.join(path.resolve(customHome), ".openclaw", "openclaw.json"),
-          );
+          expect(CONFIG_PATH).toBe(path.join(path.resolve(customHome), ".joni", "openclaw.json"));
         },
       );
     });
 
-    it("CONFIG_PATH defaults to ~/.openclaw/openclaw.json when env not set", async () => {
+    it("CONFIG_PATH defaults to ~/.joni/openclaw.json when env not set", async () => {
       await withEnvOverride(
-        { OPENCLAW_CONFIG_PATH: undefined, OPENCLAW_STATE_DIR: undefined },
+        { JONI_CONFIG_PATH: undefined, JONI_STATE_DIR: undefined },
         async () => {
           const { CONFIG_PATH } = await import("./config.js");
-          expect(CONFIG_PATH).toMatch(/\.openclaw[\\/]openclaw\.json$/);
+          expect(CONFIG_PATH).toMatch(/\.joni[\\/]openclaw\.json$/);
         },
       );
     });
 
-    it("CONFIG_PATH respects OPENCLAW_CONFIG_PATH override", async () => {
-      await withEnvOverride({ OPENCLAW_CONFIG_PATH: "/nix/store/abc/openclaw.json" }, async () => {
+    it("CONFIG_PATH respects JONI_CONFIG_PATH override", async () => {
+      await withEnvOverride({ JONI_CONFIG_PATH: "/nix/store/abc/openclaw.json" }, async () => {
         const { CONFIG_PATH } = await import("./config.js");
         expect(CONFIG_PATH).toBe(path.resolve("/nix/store/abc/openclaw.json"));
       });
     });
 
-    it("CONFIG_PATH expands ~ in OPENCLAW_CONFIG_PATH override", async () => {
+    it("CONFIG_PATH expands ~ in JONI_CONFIG_PATH override", async () => {
       await withTempHome(async (home) => {
-        await withEnvOverride({ OPENCLAW_CONFIG_PATH: "~/.openclaw/custom.json" }, async () => {
+        await withEnvOverride({ JONI_CONFIG_PATH: "~/.joni/custom.json" }, async () => {
           const { CONFIG_PATH } = await import("./config.js");
-          expect(CONFIG_PATH).toBe(path.join(home, ".openclaw", "custom.json"));
+          expect(CONFIG_PATH).toBe(path.join(home, ".joni", "custom.json"));
         });
       });
     });
@@ -106,8 +101,8 @@ describe("Nix integration (U3, U5, U9)", () => {
     it("CONFIG_PATH uses STATE_DIR when only state dir is overridden", async () => {
       await withEnvOverride(
         {
-          OPENCLAW_CONFIG_PATH: undefined,
-          OPENCLAW_STATE_DIR: "/custom/state",
+          JONI_CONFIG_PATH: undefined,
+          JONI_STATE_DIR: "/custom/state",
         },
         async () => {
           const { CONFIG_PATH } = await import("./config.js");
@@ -120,7 +115,7 @@ describe("Nix integration (U3, U5, U9)", () => {
   describe("U5b: tilde expansion for config paths", () => {
     it("expands ~ in common path-ish config fields", async () => {
       await withTempHome(async (home) => {
-        const configDir = path.join(home, ".openclaw");
+        const configDir = path.join(home, ".joni");
         await fs.mkdir(configDir, { recursive: true });
         const pluginDir = path.join(home, "plugins", "demo-plugin");
         await fs.mkdir(pluginDir, { recursive: true });
@@ -156,7 +151,7 @@ describe("Nix integration (U3, U5, U9)", () => {
                   {
                     id: "main",
                     workspace: "~/ws-agent",
-                    agentDir: "~/.openclaw/agents/main",
+                    agentDir: "~/.joni/agents/main",
                     sandbox: { workspaceRoot: "~/sandbox-root" },
                   },
                 ],
@@ -165,7 +160,7 @@ describe("Nix integration (U3, U5, U9)", () => {
                 whatsapp: {
                   accounts: {
                     personal: {
-                      authDir: "~/.openclaw/credentials/wa-personal",
+                      authDir: "~/.joni/credentials/wa-personal",
                     },
                   },
                 },
@@ -184,12 +179,10 @@ describe("Nix integration (U3, U5, U9)", () => {
         expect(cfg.plugins?.load?.paths?.[0]).toBe(path.join(home, "plugins", "demo-plugin"));
         expect(cfg.agents?.defaults?.workspace).toBe(path.join(home, "ws-default"));
         expect(cfg.agents?.list?.[0]?.workspace).toBe(path.join(home, "ws-agent"));
-        expect(cfg.agents?.list?.[0]?.agentDir).toBe(
-          path.join(home, ".openclaw", "agents", "main"),
-        );
+        expect(cfg.agents?.list?.[0]?.agentDir).toBe(path.join(home, ".joni", "agents", "main"));
         expect(cfg.agents?.list?.[0]?.sandbox?.workspaceRoot).toBe(path.join(home, "sandbox-root"));
         expect(cfg.channels?.whatsapp?.accounts?.personal?.authDir).toBe(
-          path.join(home, ".openclaw", "credentials", "wa-personal"),
+          path.join(home, ".joni", "credentials", "wa-personal"),
         );
       });
     });
@@ -221,7 +214,7 @@ describe("Nix integration (U3, U5, U9)", () => {
   describe("U9: telegram.tokenFile schema validation", () => {
     it("accepts config with only botToken", async () => {
       await withTempHome(async (home) => {
-        const configDir = path.join(home, ".openclaw");
+        const configDir = path.join(home, ".joni");
         await fs.mkdir(configDir, { recursive: true });
         await fs.writeFile(
           path.join(configDir, "openclaw.json"),
@@ -241,7 +234,7 @@ describe("Nix integration (U3, U5, U9)", () => {
 
     it("accepts config with only tokenFile", async () => {
       await withTempHome(async (home) => {
-        const configDir = path.join(home, ".openclaw");
+        const configDir = path.join(home, ".joni");
         await fs.mkdir(configDir, { recursive: true });
         await fs.writeFile(
           path.join(configDir, "openclaw.json"),
@@ -261,7 +254,7 @@ describe("Nix integration (U3, U5, U9)", () => {
 
     it("accepts config with both botToken and tokenFile", async () => {
       await withTempHome(async (home) => {
-        const configDir = path.join(home, ".openclaw");
+        const configDir = path.join(home, ".joni");
         await fs.mkdir(configDir, { recursive: true });
         await fs.writeFile(
           path.join(configDir, "openclaw.json"),

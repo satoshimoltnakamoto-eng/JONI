@@ -18,10 +18,10 @@ describe("gateway tool", () => {
   it("schedules SIGUSR1 restart", async () => {
     vi.useFakeTimers();
     const kill = vi.spyOn(process, "kill").mockImplementation(() => true);
-    const previousStateDir = process.env.OPENCLAW_STATE_DIR;
+    const previousStateDir = process.env.JONI_STATE_DIR;
     const previousProfile = process.env.OPENCLAW_PROFILE;
     const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-test-"));
-    process.env.OPENCLAW_STATE_DIR = stateDir;
+    process.env.JONI_STATE_DIR = stateDir;
     process.env.OPENCLAW_PROFILE = "isolated";
 
     try {
@@ -61,9 +61,9 @@ describe("gateway tool", () => {
       kill.mockRestore();
       vi.useRealTimers();
       if (previousStateDir === undefined) {
-        delete process.env.OPENCLAW_STATE_DIR;
+        delete process.env.JONI_STATE_DIR;
       } else {
-        process.env.OPENCLAW_STATE_DIR = previousStateDir;
+        process.env.JONI_STATE_DIR = previousStateDir;
       }
       if (previousProfile === undefined) {
         delete process.env.OPENCLAW_PROFILE;

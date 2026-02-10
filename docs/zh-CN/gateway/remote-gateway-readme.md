@@ -125,7 +125,7 @@ launchctl bootstrap gui/$UID ~/Library/LaunchAgents/bot.molt.ssh-tunnel.plist
 - 崩溃时重新启动
 - 在后台持续运行
 
-旧版注意事项：如果存在任何遗留的 `com.openclaw.ssh-tunnel` LaunchAgent，请将其删除。
+旧版注意事项：如果存在任何遗留的 `com.joni.ssh-tunnel` LaunchAgent，请将其删除。
 
 ---
 

@@ -27,7 +27,7 @@ describe("gateway e2e", () => {
     async () => {
       const prev = {
         home: process.env.HOME,
-        configPath: process.env.OPENCLAW_CONFIG_PATH,
+        configPath: process.env.JONI_CONFIG_PATH,
         token: process.env.OPENCLAW_GATEWAY_TOKEN,
         skipChannels: process.env.OPENCLAW_SKIP_CHANNELS,
         skipGmail: process.env.OPENCLAW_SKIP_GMAIL_WATCHER,
@@ -54,10 +54,10 @@ describe("gateway e2e", () => {
 
       const nonceA = randomUUID();
       const nonceB = randomUUID();
-      const toolProbePath = path.join(workspaceDir, `.openclaw-tool-probe.${nonceA}.txt`);
+      const toolProbePath = path.join(workspaceDir, `.joni-tool-probe.${nonceA}.txt`);
       await fs.writeFile(toolProbePath, `nonceA=${nonceA}\nnonceB=${nonceB}\n`);
 
-      const configDir = path.join(tempHome, ".openclaw");
+      const configDir = path.join(tempHome, ".joni");
       await fs.mkdir(configDir, { recursive: true });
       const configPath = path.join(configDir, "openclaw.json");
 
@@ -89,7 +89,7 @@ describe("gateway e2e", () => {
       };
 
       await fs.writeFile(configPath, `${JSON.stringify(cfg, null, 2)}\n`);
-      process.env.OPENCLAW_CONFIG_PATH = configPath;
+      process.env.JONI_CONFIG_PATH = configPath;
 
       const port = await getFreeGatewayPort();
       const server = await startGatewayServer(port, {
@@ -139,7 +139,7 @@ describe("gateway e2e", () => {
         await fs.rm(tempHome, { recursive: true, force: true });
         restore();
         process.env.HOME = prev.home;
-        process.env.OPENCLAW_CONFIG_PATH = prev.configPath;
+        process.env.JONI_CONFIG_PATH = prev.configPath;
         process.env.OPENCLAW_GATEWAY_TOKEN = prev.token;
         process.env.OPENCLAW_SKIP_CHANNELS = prev.skipChannels;
         process.env.OPENCLAW_SKIP_GMAIL_WATCHER = prev.skipGmail;
@@ -153,8 +153,8 @@ describe("gateway e2e", () => {
   it("runs wizard over ws and writes auth token config", { timeout: 90_000 }, async () => {
     const prev = {
       home: process.env.HOME,
-      stateDir: process.env.OPENCLAW_STATE_DIR,
-      configPath: process.env.OPENCLAW_CONFIG_PATH,
+      stateDir: process.env.JONI_STATE_DIR,
+      configPath: process.env.JONI_CONFIG_PATH,
       token: process.env.OPENCLAW_GATEWAY_TOKEN,
       skipChannels: process.env.OPENCLAW_SKIP_CHANNELS,
       skipGmail: process.env.OPENCLAW_SKIP_GMAIL_WATCHER,
@@ -172,8 +172,8 @@ describe("gateway e2e", () => {
 
     const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-wizard-home-"));
     process.env.HOME = tempHome;
-    delete process.env.OPENCLAW_STATE_DIR;
-    delete process.env.OPENCLAW_CONFIG_PATH;
+    delete process.env.JONI_STATE_DIR;
+    delete process.env.JONI_CONFIG_PATH;
 
     const wizardToken = `wiz-${randomUUID()}`;
     const port = await getFreeGatewayPort();
@@ -265,8 +265,8 @@ describe("gateway e2e", () => {
       await server2.close({ reason: "wizard auth verify" });
       await fs.rm(tempHome, { recursive: true, force: true });
       process.env.HOME = prev.home;
-      process.env.OPENCLAW_STATE_DIR = prev.stateDir;
-      process.env.OPENCLAW_CONFIG_PATH = prev.configPath;
+      process.env.JONI_STATE_DIR = prev.stateDir;
+      process.env.JONI_CONFIG_PATH = prev.configPath;
       process.env.OPENCLAW_GATEWAY_TOKEN = prev.token;
       process.env.OPENCLAW_SKIP_CHANNELS = prev.skipChannels;
       process.env.OPENCLAW_SKIP_GMAIL_WATCHER = prev.skipGmail;

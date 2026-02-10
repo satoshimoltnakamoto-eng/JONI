@@ -22,7 +22,7 @@ Troubleshooting: [/automation/troubleshooting](/automation/troubleshooting)
 ## TL;DR
 
 - Cron runs **inside the Gateway** (not inside the model).
-- Jobs persist under `~/.openclaw/cron/` so restarts don’t lose schedules.
+- Jobs persist under `~/.joni/cron/` so restarts don’t lose schedules.
 - Two execution styles:
   - **Main session**: enqueue a system event, then run on the next heartbeat.
   - **Isolated**: run a dedicated agent turn in `cron:<jobId>`, with delivery (announce by default or none).
@@ -66,7 +66,7 @@ For the canonical JSON shapes and examples, see [JSON schema for tool calls](/au
 
 ## Where cron jobs are stored
 
-Cron jobs are persisted on the Gateway host at `~/.openclaw/cron/jobs.json` by default.
+Cron jobs are persisted on the Gateway host at `~/.joni/cron/jobs.json` by default.
 The Gateway loads the file into memory and writes it back on changes, so manual edits
 are only safe when the Gateway is stopped. Prefer `openclaw cron add/edit` or the cron
 tool call API for changes.
@@ -321,8 +321,8 @@ Notes:
 
 ## Storage & history
 
-- Job store: `~/.openclaw/cron/jobs.json` (Gateway-managed JSON).
-- Run history: `~/.openclaw/cron/runs/<jobId>.jsonl` (JSONL, auto-pruned).
+- Job store: `~/.joni/cron/jobs.json` (Gateway-managed JSON).
+- Run history: `~/.joni/cron/runs/<jobId>.jsonl` (JSONL, auto-pruned).
 - Override store path: `cron.store` in config.
 
 ## Configuration
@@ -331,7 +331,7 @@ Notes:
 {
   cron: {
     enabled: true, // default true
-    store: "~/.openclaw/cron/jobs.json",
+    store: "~/.joni/cron/jobs.json",
     maxConcurrentRuns: 1, // default 1
   },
 }

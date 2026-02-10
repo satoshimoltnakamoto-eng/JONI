@@ -1,6 +1,6 @@
 # OpenClaw Security & Trust
 
-**Live:** [trust.openclaw.ai](https://trust.openclaw.ai)
+**Live:** [trust.joni.ai](https://trust.joni.ai)
 
 ## Documents
 
@@ -9,7 +9,7 @@
 
 ## Reporting Vulnerabilities
 
-See the [Trust page](https://trust.openclaw.ai) for full reporting instructions covering all repos.
+See the [Trust page](https://trust.joni.ai) for full reporting instructions covering all repos.
 
 ## Contact
 

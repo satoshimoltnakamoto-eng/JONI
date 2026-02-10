@@ -58,8 +58,8 @@ metadata:
 
     // Verify the metadata is valid JSON
     const parsed = JSON.parse(result.metadata);
-    expect(parsed.openclaw.emoji).toBe("💾");
-    expect(parsed.openclaw.events).toEqual(["command:new"]);
+    expect(parsed.joni.emoji).toBe("💾");
+    expect(parsed.joni.events).toEqual(["command:new"]);
   });
 
   it("parses multi-line metadata with complex nested structure", () => {
@@ -83,10 +83,10 @@ metadata:
     expect(result.metadata).toBeDefined();
 
     const parsed = JSON.parse(result.metadata);
-    expect(parsed.openclaw.emoji).toBe("📝");
-    expect(parsed.openclaw.events).toEqual(["command"]);
-    expect(parsed.openclaw.requires.config).toEqual(["workspace.dir"]);
-    expect(parsed.openclaw.install[0].kind).toBe("bundled");
+    expect(parsed.joni.emoji).toBe("📝");
+    expect(parsed.joni.events).toEqual(["command"]);
+    expect(parsed.joni.requires.config).toEqual(["workspace.dir"]);
+    expect(parsed.joni.install[0].kind).toBe("bundled");
   });
 
   it("handles single-line metadata (inline JSON)", () => {

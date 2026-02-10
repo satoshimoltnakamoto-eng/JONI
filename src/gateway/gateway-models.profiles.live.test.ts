@@ -491,7 +491,7 @@ function buildMinimaxProviderOverride(params: {
 
 async function runGatewayModelSuite(params: GatewayModelSuiteParams) {
   const previous = {
-    configPath: process.env.OPENCLAW_CONFIG_PATH,
+    configPath: process.env.JONI_CONFIG_PATH,
     token: process.env.OPENCLAW_GATEWAY_TOKEN,
     skipChannels: process.env.OPENCLAW_SKIP_CHANNELS,
     skipGmail: process.env.OPENCLAW_SKIP_GMAIL_WATCHER,
@@ -499,7 +499,7 @@ async function runGatewayModelSuite(params: GatewayModelSuiteParams) {
     skipCanvas: process.env.OPENCLAW_SKIP_CANVAS_HOST,
     agentDir: process.env.OPENCLAW_AGENT_DIR,
     piAgentDir: process.env.PI_CODING_AGENT_DIR,
-    stateDir: process.env.OPENCLAW_STATE_DIR,
+    stateDir: process.env.JONI_STATE_DIR,
   };
   let tempAgentDir: string | undefined;
   let tempStateDir: string | undefined;
@@ -527,7 +527,7 @@ async function runGatewayModelSuite(params: GatewayModelSuiteParams) {
     usageStats: hostStore.usageStats ? { ...hostStore.usageStats } : undefined,
   };
   tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-live-state-"));
-  process.env.OPENCLAW_STATE_DIR = tempStateDir;
+  process.env.JONI_STATE_DIR = tempStateDir;
   tempAgentDir = path.join(tempStateDir, "agents", DEFAULT_AGENT_ID, "agent");
   saveAuthProfileStore(sanitizedStore, tempAgentDir);
   const tempSessionAgentDir = path.join(tempStateDir, "agents", agentId, "agent");
@@ -541,7 +541,7 @@ async function runGatewayModelSuite(params: GatewayModelSuiteParams) {
   await fs.mkdir(workspaceDir, { recursive: true });
   const nonceA = randomUUID();
   const nonceB = randomUUID();
-  const toolProbePath = path.join(workspaceDir, `.openclaw-live-tool-probe.${nonceA}.txt`);
+  const toolProbePath = path.join(workspaceDir, `.joni-live-tool-probe.${nonceA}.txt`);
   await fs.writeFile(toolProbePath, `nonceA=${nonceA}\nnonceB=${nonceB}\n`);
 
   const agentDir = resolveOpenClawAgentDir();
@@ -557,7 +557,7 @@ async function runGatewayModelSuite(params: GatewayModelSuiteParams) {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-live-"));
   const tempConfigPath = path.join(tempDir, "openclaw.json");
   await fs.writeFile(tempConfigPath, `${JSON.stringify(nextCfg, null, 2)}\n`);
-  process.env.OPENCLAW_CONFIG_PATH = tempConfigPath;
+  process.env.JONI_CONFIG_PATH = tempConfigPath;
 
   await ensureOpenClawModelsJson(nextCfg);
 
@@ -997,7 +997,7 @@ async function runGatewayModelSuite(params: GatewayModelSuiteParams) {
       await fs.rm(tempStateDir, { recursive: true, force: true });
     }
 
-    process.env.OPENCLAW_CONFIG_PATH = previous.configPath;
+    process.env.JONI_CONFIG_PATH = previous.configPath;
     process.env.OPENCLAW_GATEWAY_TOKEN = previous.token;
     process.env.OPENCLAW_SKIP_CHANNELS = previous.skipChannels;
     process.env.OPENCLAW_SKIP_GMAIL_WATCHER = previous.skipGmail;
@@ -1005,7 +1005,7 @@ async function runGatewayModelSuite(params: GatewayModelSuiteParams) {
     process.env.OPENCLAW_SKIP_CANVAS_HOST = previous.skipCanvas;
     process.env.OPENCLAW_AGENT_DIR = previous.agentDir;
     process.env.PI_CODING_AGENT_DIR = previous.piAgentDir;
-    process.env.OPENCLAW_STATE_DIR = previous.stateDir;
+    process.env.JONI_STATE_DIR = previous.stateDir;
   }
 }
 
@@ -1105,7 +1105,7 @@ describeLive("gateway live (dev agent, profile keys)", () => {
       return;
     }
     const previous = {
-      configPath: process.env.OPENCLAW_CONFIG_PATH,
+      configPath: process.env.JONI_CONFIG_PATH,
       token: process.env.OPENCLAW_GATEWAY_TOKEN,
       skipChannels: process.env.OPENCLAW_SKIP_CHANNELS,
       skipGmail: process.env.OPENCLAW_SKIP_GMAIL_WATCHER,
@@ -1145,7 +1145,7 @@ describeLive("gateway live (dev agent, profile keys)", () => {
     await fs.mkdir(workspaceDir, { recursive: true });
     const nonceA = randomUUID();
     const nonceB = randomUUID();
-    const toolProbePath = path.join(workspaceDir, `.openclaw-live-zai-fallback.${nonceA}.txt`);
+    const toolProbePath = path.join(workspaceDir, `.joni-live-zai-fallback.${nonceA}.txt`);
     await fs.writeFile(toolProbePath, `nonceA=${nonceA}\nnonceB=${nonceB}\n`);
 
     const port = await getFreeGatewayPort();
@@ -1236,7 +1236,7 @@ describeLive("gateway live (dev agent, profile keys)", () => {
       await server.close({ reason: "live test complete" });
       await fs.rm(toolProbePath, { force: true });
 
-      process.env.OPENCLAW_CONFIG_PATH = previous.configPath;
+      process.env.JONI_CONFIG_PATH = previous.configPath;
       process.env.OPENCLAW_GATEWAY_TOKEN = previous.token;
       process.env.OPENCLAW_SKIP_CHANNELS = previous.skipChannels;
       process.env.OPENCLAW_SKIP_GMAIL_WATCHER = previous.skipGmail;

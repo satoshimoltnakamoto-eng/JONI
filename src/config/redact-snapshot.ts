@@ -1,4 +1,4 @@
-import type { ConfigFileSnapshot } from "./types.openclaw.js";
+import type { ConfigFileSnapshot } from "./types.joni.js";
 
 /**
  * Sentinel value used to replace sensitive config fields in gateway responses.
