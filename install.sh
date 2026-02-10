@@ -140,7 +140,7 @@ joni onboard \
 
 echo ""
 echo ""
-echo -e "${GREEN}🎉 JONI is ready!${NC}"
+echo -e "${GREEN}🎉 JONI is fully installed and configured!${NC}"
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
