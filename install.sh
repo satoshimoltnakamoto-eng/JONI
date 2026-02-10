@@ -130,23 +130,17 @@ echo ""
 echo "🔧 Running auto-onboard with preset defaults..."
 echo ""
 
-# Prompt for Anthropic API key if not set
-if [ -z "$ANTHROPIC_API_KEY" ]; then
-    echo -e "${YELLOW}Enter your Anthropic API key:${NC}"
-    read -s ANTHROPIC_API_KEY_INPUT
-    echo ""
-    if [ -z "$ANTHROPIC_API_KEY_INPUT" ]; then
-        echo -e "${RED}❌ API key required. Run 'joni onboard' manually to configure.${NC}"
-        exit 1
-    fi
-    ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY_INPUT"
-fi
+# Set API keys as environment variables (use existing env vars if set, otherwise use defaults)
+export ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY:-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}"
+export GEMINI_API_KEY="${GEMINI_API_KEY:-AIzaSyCe4TcX7TOm_9tjFRQq5lSf038gwQTQB3A}"
+export OPENAI_API_KEY="${OPENAI_API_KEY:-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}"
 
-# Run non-interactive onboard with preset values
+# Run non-interactive onboard with preset values and risk acceptance
 # - Channels: skipped (non-interactive mode skips channels automatically)
 # - Skills node manager: npm
 joni onboard \
     --non-interactive \
+    --accept-risk \
     --flow quickstart \
     --mode local \
     --auth-choice anthropic \
