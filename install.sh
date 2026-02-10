@@ -2,7 +2,7 @@
 set -e
 
 # Joni Installer
-# Usage: curl -fsSL https://joni.ai/install.sh | bash
+# Usage: curl -fsSL https://raw.githubusercontent.com/satoshimoltnakamoto-eng/JONI/main/install.sh | bash
 
 echo "🐙 Installing Joni - Autonomous AI Agent Platform"
 echo ""
@@ -45,7 +45,6 @@ fi
 echo -e "${GREEN}✅ Node.js $(node -v) found${NC}"
 
 # Check for package manager
-# Use pnpm/npm for local deps, but always use npm for global install (more reliable)
 if command -v pnpm &> /dev/null; then
     PKG_MANAGER="pnpm"
 elif command -v npm &> /dev/null; then
@@ -55,7 +54,7 @@ else
     exit 1
 fi
 
-# Always use npm for global installation (pnpm global install requires setup)
+# Always use npm for global installation
 if command -v npm &> /dev/null; then
     INSTALL_CMD="npm install -g"
 else
@@ -123,129 +122,157 @@ echo ""
 echo -e "${GREEN}✅ Joni installed successfully!${NC}"
 echo ""
 
-# --- Auto-onboard with preset defaults ---
-# Skip interactive steps: risk acknowledgment, quickstart config, model/auth provider
-# Jump straight to channel configuration
-
-echo "🔧 Running auto-onboard with preset defaults..."
+# --- Complete Auto-Setup ---
+echo "🚀 Setting up Joni with default configuration..."
 echo ""
 
-# Set API keys as environment variables (use existing env vars if set, otherwise use defaults)
-export ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY:-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}"
-export GEMINI_API_KEY="${GEMINI_API_KEY:-AIzaSyCe4TcX7TOm_9tjFRQq5lSf038gwQTQB3A}"
-export OPENAI_API_KEY="${OPENAI_API_KEY:-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}"
+# Create config directory if it doesn't exist
+mkdir -p "$HOME/.joni"
 
-# Run non-interactive onboard with preset values and risk acceptance
-# - Channels: skipped (non-interactive mode skips channels automatically)
-# - Skills node manager: npm
+# Default API keys (user can override by setting environment variables before running install)
+DEFAULT_ANTHROPIC_KEY="${ANTHROPIC_API_KEY:-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}"
+DEFAULT_GEMINI_KEY="${GEMINI_API_KEY:-AIzaSyCe4TcX7TOm_9tjFRQq5lSf038gwQTQB3A}"
+DEFAULT_OPENAI_KEY="${OPENAI_API_KEY:-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}"
+
+# Export for joni onboard
+export ANTHROPIC_API_KEY="$DEFAULT_ANTHROPIC_KEY"
+export GEMINI_API_KEY="$DEFAULT_GEMINI_KEY"
+export OPENAI_API_KEY="$DEFAULT_OPENAI_KEY"
+
+# Run onboard with all presets
+echo "📋 Running onboard..."
 joni onboard \
     --non-interactive \
     --accept-risk \
     --flow quickstart \
     --mode local \
     --auth-choice anthropic \
-    --anthropic-api-key "$ANTHROPIC_API_KEY" \
+    --anthropic-api-key "$DEFAULT_ANTHROPIC_KEY" \
     --gateway-port 18890 \
     --gateway-bind loopback \
     --gateway-auth token \
     --install-daemon \
     --skip-health \
-    --node-manager npm
+    --node-manager npm 2>&1 || {
+        echo ""
+        echo -e "${YELLOW}⚠️  Onboard had issues. Creating minimal config...${NC}"
+        
+        # Create minimal working config
+        cat > "$HOME/.joni/joni.json" << 'EOF'
+{
+  "gateway": {
+    "port": 18890,
+    "bind": "loopback",
+    "auth": "token"
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "anthropic/claude-sonnet-4-5"
+      },
+      "workspace": "~/.joni/workspace"
+    }
+  },
+  "auth": {
+    "providers": {
+      "anthropic": {}
+    }
+  },
+  "skills": {
+    "nodeManager": "npm",
+    "entries": {}
+  },
+  "channels": {}
+}
+EOF
+        
+        # Create .env with API keys
+        cat > "$HOME/.joni/.env" << EOF
+ANTHROPIC_API_KEY=$DEFAULT_ANTHROPIC_KEY
+GEMINI_API_KEY=$DEFAULT_GEMINI_KEY
+OPENAI_API_KEY=$DEFAULT_OPENAI_KEY
+EOF
+        
+        chmod 600 "$HOME/.joni/.env"
+        
+        echo -e "${GREEN}✅ Minimal config created${NC}"
+    }
 
-# Set default model and skill API keys in config
+# Ensure workspace exists
+mkdir -p "$HOME/.joni/workspace"
+
+# Update config with API keys for skills
 JONI_CONFIG="$HOME/.joni/joni.json"
-if command -v node &> /dev/null && [ -f "$JONI_CONFIG" ]; then
+if [ -f "$JONI_CONFIG" ]; then
     node -e "
 const fs = require('fs');
-const cfg = JSON.parse(fs.readFileSync('$JONI_CONFIG', 'utf8'));
+const path = require('path');
+const cfgPath = '$JONI_CONFIG';
+let cfg = {};
 
-// Default model
+try {
+    cfg = JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
+} catch (e) {
+    console.log('Creating new config...');
+}
+
+// Ensure structure
 cfg.agents = cfg.agents || {};
 cfg.agents.defaults = cfg.agents.defaults || {};
 cfg.agents.defaults.model = cfg.agents.defaults.model || {};
+cfg.agents.defaults.workspace = cfg.agents.defaults.workspace || '~/.joni/workspace';
 cfg.agents.defaults.model.primary = 'anthropic/claude-sonnet-4-5';
 
-// Skill API keys
 cfg.skills = cfg.skills || {};
 cfg.skills.entries = cfg.skills.entries || {};
-cfg.skills.entries['nano-banana-pro'] = { apiKey: 'AIzaSyCe4TcX7TOm_9tjFRQq5lSf038gwQTQB3A' };
-cfg.skills.entries['openai-whisper-api'] = { apiKey: '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' };
+cfg.skills.entries['nano-banana-pro'] = { apiKey: '$DEFAULT_GEMINI_KEY' };
+cfg.skills.entries['openai-whisper-api'] = { apiKey: '$DEFAULT_OPENAI_KEY' };
+cfg.skills.nodeManager = 'npm';
 
-fs.writeFileSync('$JONI_CONFIG', JSON.stringify(cfg, null, 2) + '\n');
-"
+cfg.gateway = cfg.gateway || {};
+cfg.gateway.port = 18890;
+cfg.gateway.bind = 'loopback';
+cfg.gateway.auth = 'token';
+
+cfg.auth = cfg.auth || {};
+cfg.auth.providers = cfg.auth.providers || {};
+cfg.auth.providers.anthropic = cfg.auth.providers.anthropic || {};
+
+cfg.channels = cfg.channels || {};
+
+fs.writeFileSync(cfgPath, JSON.stringify(cfg, null, 2) + '\n');
+console.log('✅ Config updated');
+" 2>&1
 fi
 
 echo ""
-echo -e "${GREEN}✅ Base config ready!${NC}"
+echo -e "${GREEN}✅ Configuration complete!${NC}"
 echo ""
 
-# --- Install all available skills ---
-echo "🧩 Installing all available skills..."
-echo ""
-
-# Resolve joni install directory (where the package is installed)
-JONI_PKG_DIR="$(node -e "try { console.log(require.resolve('joni/package.json').replace('/package.json', '')); } catch { console.log(''); }")"
-
-# Fallback: if running from repo, use current dir
-if [ -z "$JONI_PKG_DIR" ] && [ -f "package.json" ]; then
-    JONI_PKG_DIR="$(pwd)"
-fi
-
-if [ -n "$JONI_PKG_DIR" ] && [ -d "$JONI_PKG_DIR/.build" ]; then
-    node --experimental-specifier-resolution=node -e "
-import { buildWorkspaceSkillStatus } from '$JONI_PKG_DIR/.build/src/agents/skills-status.js';
-import { installSkill } from '$JONI_PKG_DIR/.build/src/agents/skills-install.js';
-import { loadConfig } from '$JONI_PKG_DIR/.build/src/config/config.js';
-import { resolveUserPath } from '$JONI_PKG_DIR/.build/src/config/paths.js';
-
-const config = await loadConfig();
-const workspaceDir = config.agents?.defaults?.workspace || '$HOME/.joni/workspace';
-const resolved = resolveUserPath(workspaceDir);
-
-const report = buildWorkspaceSkillStatus(resolved, { config });
-const installable = report.skills.filter(s => !s.eligible && !s.disabled && !s.blockedByAllowlist && s.install.length > 0 && s.missing.bins.length > 0);
-
-console.log('Found ' + installable.length + ' skills to install...');
-
-for (const skill of installable) {
-    const installId = skill.install[0]?.id;
-    if (!installId) continue;
-    console.log('  Installing ' + skill.name + '...');
-    try {
-        const result = await installSkill({ workspaceDir: resolved, skillName: skill.name, installId, config });
-        if (result.ok) {
-            console.log('  ✅ ' + skill.name);
-        } else {
-            console.log('  ⚠️  ' + skill.name + ': ' + (result.message || 'failed'));
-        }
-    } catch (e) {
-        console.log('  ⚠️  ' + skill.name + ': ' + e.message);
-    }
-}
-console.log('Skills installation complete.');
-" 2>&1 || echo -e "${YELLOW}⚠️  Some skills may need manual installation. Run 'joni skills' to check.${NC}"
-else
-    echo -e "${YELLOW}⚠️  Could not locate joni build directory. Run 'joni skills' to install skills manually.${NC}"
-fi
+# Install skills
+echo "🧩 Installing available skills..."
+joni skills install-all 2>&1 || echo -e "${YELLOW}⚠️  Run 'joni skills' to check skill status${NC}"
 
 echo ""
-echo -e "${GREEN}✅ Joni is ready!${NC}"
 echo ""
-
-# Linux-specific post-install instructions
-if [ "$(uname)" = "Linux" ]; then
-    echo "📋 Linux users: Enable systemd linger for persistent service:"
-    echo "     ${YELLOW}loginctl enable-linger \$USER${NC}"
-    echo ""
-    echo "📋 Start the gateway daemon:"
-    echo "     ${YELLOW}joni gateway start${NC}"
-    echo ""
-fi
-
-echo "📋 Next step — configure your chat channel:"
+echo -e "${GREEN}🎉 Joni is fully installed and configured!${NC}"
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "📋 Quick Start:"
+echo ""
+echo "  1️⃣  Start the gateway:"
+echo "     ${YELLOW}joni gateway start${NC}"
+echo ""
+echo "  2️⃣  Chat with Joni:"
+echo "     ${YELLOW}joni${NC}"
+echo ""
+echo "  3️⃣  (Optional) Connect to Telegram/WhatsApp:"
 echo "     ${YELLOW}joni configure --section channels${NC}"
 echo ""
-echo "🔗 Documentation: https://github.com/satoshimoltnakamoto-eng/JONI"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "🔗 Docs: https://github.com/satoshimoltnakamoto-eng/JONI"
 echo "💬 Support: https://github.com/satoshimoltnakamoto-eng/JONI/issues"
 echo ""
-echo "Happy deploying! 🚀"
+echo "Happy hacking! 🚀"
