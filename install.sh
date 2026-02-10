@@ -45,18 +45,25 @@ fi
 echo -e "${GREEN}✅ Node.js $(node -v) found${NC}"
 
 # Check for package manager
+# Use pnpm/npm for local deps, but always use npm for global install (more reliable)
 if command -v pnpm &> /dev/null; then
     PKG_MANAGER="pnpm"
-    INSTALL_CMD="pnpm add -g"
 elif command -v npm &> /dev/null; then
     PKG_MANAGER="npm"
-    INSTALL_CMD="npm install -g"
 else
     echo -e "${RED}❌ No package manager found${NC}"
     exit 1
 fi
 
-echo -e "${GREEN}✅ Using $PKG_MANAGER${NC}"
+# Always use npm for global installation (pnpm global install requires setup)
+if command -v npm &> /dev/null; then
+    INSTALL_CMD="npm install -g"
+else
+    echo -e "${RED}❌ npm not found${NC}"
+    exit 1
+fi
+
+echo -e "${GREEN}✅ Using $PKG_MANAGER for dependencies, npm for global install${NC}"
 echo ""
 
 # Determine installation method
