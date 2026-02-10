@@ -62,7 +62,7 @@ else
     exit 1
 fi
 
-echo -e "${GREEN}✅ Using \$PKG_MANAGER for dependencies, npm for global install${NC}"
+echo -e "${GREEN}✅ Using $PKG_MANAGER for dependencies, npm for global install${NC}"
 echo ""
 
 # Determine installation method
@@ -73,84 +73,70 @@ if [ -d ".git" ] && [ -f "package.json" ]; then
     
     # Install dependencies
     echo "⬇️  Installing dependencies..."
-    \$PKG_MANAGER install
+    $PKG_MANAGER install
     
     # Build
     echo "🔨 Building JONI..."
-    \$PKG_MANAGER run build
+    $PKG_MANAGER run build
     
     # Install globally
     echo "🌍 Installing globally..."
-    \$INSTALL_CMD .
+    $INSTALL_CMD .
     
 else
     # Download from GitHub
     REPO_URL="https://github.com/satoshimoltnakamoto-eng/JONI"
-    TEMP_DIR="/tmp/joni-install-\$\$"
+    TEMP_DIR="/tmp/joni-install-$$"
     
     echo "⬇️  Downloading JONI from GitHub..."
     
     if command -v git &> /dev/null; then
-        git clone --depth 1 "\$REPO_URL" "\$TEMP_DIR"
-        cd "\$TEMP_DIR"
+        git clone --depth 1 "$REPO_URL" "$TEMP_DIR"
+        cd "$TEMP_DIR"
     else
         echo -e "${RED}❌ Git not found. Cannot download JONI.${NC}"
         echo ""
         echo "Install Git first, or download manually from:"
-        echo "  \$REPO_URL"
+        echo "  $REPO_URL"
         exit 1
     fi
     
     # Install dependencies
     echo "⬇️  Installing dependencies..."
-    \$PKG_MANAGER install
+    $PKG_MANAGER install
     
     # Build
     echo "🔨 Building JONI..."
-    \$PKG_MANAGER run build
+    $PKG_MANAGER run build
     
     # Install globally
     echo "🌍 Installing globally..."
-    \$INSTALL_CMD .
+    $INSTALL_CMD .
     
     # Cleanup
     cd -
-    rm -rf "\$TEMP_DIR"
+    rm -rf "$TEMP_DIR"
 fi
 
 echo ""
 echo -e "${GREEN}✅ JONI installed successfully!${NC}"
 echo ""
 
-# --- Complete Auto-Setup ---
-echo "🚀 Setting up JONI with default configuration..."
+# --- Auto-Setup with proper onboard ---
+echo "🚀 Setting up JONI..."
 echo ""
 
-# Create config directory if it doesn't exist
-mkdir -p "\$HOME/.joni"
+# Set default API keys if not already set
+export ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY:-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}"
 
-# Default API keys
-DEFAULT_ANTHROPIC_KEY="\${ANTHROPIC_API_KEY:-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}"
-DEFAULT_GEMINI_KEY="\${GEMINI_API_KEY:-AIzaSyCe4TcX7TOm_9tjFRQq5lSf038gwQTQB3A}"
-DEFAULT_OPENAI_KEY="\${OPENAI_API_KEY:-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}"
-
-# Export for joni onboard
-export ANTHROPIC_API_KEY="\$DEFAULT_ANTHROPIC_KEY"
-export GEMINI_API_KEY="\$DEFAULT_GEMINI_KEY"
-export OPENAI_API_KEY="\$DEFAULT_OPENAI_KEY"
-
-# Run onboard
-echo "📋 Running onboard..."
-joni onboard \\
-    --non-interactive \\
-    --accept-risk \\
-    --flow quickstart \\
-    --mode local \\
-    --install-daemon \\
-    --skip-health 2>&1 || {
-        echo ""
-        echo -e "${YELLOW}⚠️  Run 'joni onboard' manually to configure${NC}"
-    }
+# Run onboard - let it create the config properly
+echo "📋 Configuring JONI..."
+joni onboard \
+    --non-interactive \
+    --accept-risk \
+    --flow quickstart \
+    --mode local \
+    --install-daemon 2>&1
 
 echo ""
 echo ""
