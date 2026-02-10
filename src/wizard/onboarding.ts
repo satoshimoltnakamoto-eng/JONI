@@ -100,7 +100,7 @@ export async function runOnboardingWizard(
         [
           ...snapshot.issues.map((iss) => `- ${iss.path}: ${iss.message}`),
           "",
-          "Docs: https://docs.openclaw.ai/gateway/configuration",
+          "Docs: https://docs.joni.ai/gateway/configuration",
         ].join("\n"),
         "Config issues",
       );

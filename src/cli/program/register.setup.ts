@@ -13,8 +13,7 @@ export function registerSetupCommand(program: Command) {
     .description("Initialize ~/.joni/openclaw.json and the agent workspace")
     .addHelpText(
       "after",
-      () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/setup", "docs.openclaw.ai/cli/setup")}\n`,
+      () => `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/setup", "docs.joni.ai/cli/setup")}\n`,
     )
     .option(
       "--workspace <dir>",

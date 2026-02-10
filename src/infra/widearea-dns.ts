@@ -105,8 +105,8 @@ export type WideAreaGatewayZoneOpts = {
 
 function renderZone(opts: WideAreaGatewayZoneOpts & { serial: number }): string {
   const hostname = os.hostname().split(".")[0] ?? "openclaw";
-  const hostLabel = dnsLabel(opts.hostLabel ?? hostname, "openclaw");
-  const instanceLabel = dnsLabel(opts.instanceLabel ?? `${hostname}-gateway`, "openclaw-gw");
+  const hostLabel = dnsLabel(opts.hostLabel ?? hostname, "joni");
+  const instanceLabel = dnsLabel(opts.instanceLabel ?? `${hostname}-gateway`, "joni-gw");
   const domain = normalizeWideAreaDomain(opts.domain) ?? "local.";
 
   const txt = [
